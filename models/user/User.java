@@ -90,6 +90,19 @@ public class User extends Model {
         }
     }
 
+    public Boolean login(String email, String password) {
+        try {
+            String rawQuery = String.format("SELECT * FROM %s WHERE email=? AND password=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setString(1, email);
+            result.setString(2, password);
+            return result.executeQuery().isBeforeFirst();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public Model getOne(Integer userId) {
         // TODO Auto-generated method stub
         return null;

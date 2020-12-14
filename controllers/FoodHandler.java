@@ -1,11 +1,12 @@
 package controllers;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 import core.Controller;
 import core.Model;
 import core.View;
 import models.food.Food;
+import views.food.MenuView;
 
 public class FoodHandler extends Controller {
 
@@ -46,13 +47,13 @@ public class FoodHandler extends Controller {
         return null;
     }
 
-    public ArrayList<Model> viewAll() {
+    public Vector<Model> viewAll() {
         // TODO Auto-generated method stub
-        return null;
+        return new Vector<>();
     }
 
     public View viewMenu() {
-        return null;
+        return new MenuView();
     }
 
     public View viewManageFoodForm() {

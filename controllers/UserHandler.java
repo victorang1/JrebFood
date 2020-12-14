@@ -30,6 +30,13 @@ public class UserHandler extends Controller {
         return user.createAccount(name, address, email, phoneNumber, password);
     }
 
+    public Boolean login(String name, String password) {
+        User user = new User();
+        user.setName(name)
+            .setPassword(password);
+        return user.login(name, password);
+    }
+
     public Model getOne(Integer userId) {
         // TODO Auto-generated method stub
         return null;
@@ -44,6 +51,10 @@ public class UserHandler extends Controller {
 
     public Boolean validateFields(String email, String phoneNumber) {
         return StringUtil.isNullOrEmpty(email) || StringUtil.isNullOrEmpty(phoneNumber);
+    }
+
+    public Boolean validateLoginFields(String email, String password) {
+        return StringUtil.isNullOrEmpty(email) || StringUtil.isNullOrEmpty(password);
     }
 
     public View viewUserInformation() {

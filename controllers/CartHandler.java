@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import core.Controller;
 import core.Model;
 import core.View;
+import views.cart.AddCartView;
 
 public class CartHandler extends Controller {
 
@@ -47,7 +48,7 @@ public class CartHandler extends Controller {
     }
 
     public View viewAddCart() {
-        return null;
+        return new AddCartView();
     }
     
     public View viewManageCartForm() {

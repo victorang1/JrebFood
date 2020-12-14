@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.util.logging.Handler;
 import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
@@ -88,6 +89,26 @@ public class LoginFormView extends View implements ActionListener {
     }
 
     private void login() {
-        
+        String email = etEmail.getText();
+        String password = etPassword.getText();
+        UserHandler userHandler = UserHandler.getInstance();
+        if (userHandler.validateFields(email, password)) {
+            lblErrorMessage.setText("All field must be input!");
+        }
+        else {
+            if (userHandler.login(email, password)) {
+                lblErrorMessage.setText("Login Success, redirecting to menu page...");
+                try {
+                    Thread.sleep(1000);
+                    dispose();
+                } catch(Exception e) {
+                    
+                }
+            }
+            else {
+                lblErrorMessage.setText("Something went wrong");
+            }
+        }
+        lblErrorMessage.setVisible(true);
     }
 }
