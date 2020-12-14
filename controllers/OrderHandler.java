@@ -12,7 +12,7 @@ public class OrderHandler extends Controller {
     private static OrderHandler instance;
 
     public static OrderHandler getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new OrderHandler();
         }
         return instance;

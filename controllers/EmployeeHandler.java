@@ -12,7 +12,7 @@ public class EmployeeHandler extends Controller {
     private static EmployeeHandler instance;
 
     public static EmployeeHandler getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new EmployeeHandler();
         }
         return instance;

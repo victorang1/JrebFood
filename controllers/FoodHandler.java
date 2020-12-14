@@ -12,7 +12,7 @@ public class FoodHandler extends Controller {
     private static FoodHandler instance;
 
     public static FoodHandler getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new FoodHandler();
         }
         return instance;

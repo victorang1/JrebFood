@@ -13,9 +13,10 @@ public abstract class View extends JFrame {
         onInitView();
         onViewCreated();
         initListener();
+        showView();
     }
 
-    public void showForm(){
+    private void showView(){
 		setSize(frameWidth, frameHeight);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);

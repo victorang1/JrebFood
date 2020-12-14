@@ -3,13 +3,15 @@ package controllers;
 import core.Controller;
 import core.Model;
 import core.View;
+import util.StringUtil;
+import views.user.RegistrationFormView;
 
 public class UserHandler extends Controller {
 
     private static UserHandler instance;
 
     public static UserHandler getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new UserHandler();
         }
         return instance;
@@ -26,12 +28,12 @@ public class UserHandler extends Controller {
         return null;
     }
 
-    public Boolean validateUnique(String email, Integer phoneNumber) {
-        return null;
+    public Boolean validateUnique(String email, String phoneNumber) {
+        return false;
     }
 
-    public Boolean validateFields(String email, Integer phoneNumber) {
-        return null;
+    public Boolean validateFields(String email, String phoneNumber) {
+        return StringUtil.isNullOrEmpty(email) || StringUtil.isNullOrEmpty(phoneNumber);
     }
 
     public View viewUserInformation() {
@@ -39,6 +41,6 @@ public class UserHandler extends Controller {
     }
 
     public View viewRegistrationForm() {
-        return null;
+        return new RegistrationFormView();
     }
 }
