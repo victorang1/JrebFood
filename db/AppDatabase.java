@@ -2,14 +2,13 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
 
 import java.sql.PreparedStatement;
 
 
 public class AppDatabase {
     
-    private final String DB_USERNAME = "host";
+    private final String DB_USERNAME = "root";
     private final String DB_PASS = "";
     private final String DB_NAME = "jrebfood";
     private final String DB_HOST = "localhost";
@@ -18,13 +17,11 @@ public class AppDatabase {
     private static AppDatabase mInstance;
 
     private Connection connection;
-    private Statement statement;
 
     private AppDatabase() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(getConnectionString(), DB_USERNAME, DB_PASS);
-            statement = connection.createStatement();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Failed to connect to database, the system will be terminated.");

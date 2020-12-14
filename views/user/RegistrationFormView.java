@@ -26,13 +26,13 @@ public class RegistrationFormView extends View implements ActionListener {
     private JButton btnCreate;
 
     public RegistrationFormView() {
-        super(300, 250);
+        super(300, 280);
 	}
 
 	@Override
     protected void onInitView() {
         formPanel = new JPanel();
-        contentPanel = new JPanel(new GridLayout(5, 2));
+        contentPanel = new JPanel(new GridLayout(5, 2, 0, 5));
 
         lblName = new JLabel("Name: ");
         lblAddress = new JLabel("Address: ");
@@ -110,16 +110,19 @@ public class RegistrationFormView extends View implements ActionListener {
         String password = etPassword.getText();
         UserHandler userHandler = UserHandler.getInstance();
         if (userHandler.validateFields(email, phoneNumber)) {
-            lblErrorMessage.setVisible(true);
             lblErrorMessage.setText("All field must be input!");
         }
         else if (userHandler.validateUnique(email, phoneNumber)) {
-            lblErrorMessage.setVisible(true);
             lblErrorMessage.setText("Email/Phone Number has been used!");
         }
         else {
-            lblErrorMessage.setVisible(false);
-            userHandler.createAccount(name, address, email, phoneNumber, password);
+            if (userHandler.createAccount(name, address, email, phoneNumber, password)) {
+                lblErrorMessage.setText("Register Success");
+            }
+            else {
+                lblErrorMessage.setText("Something went wrong");
+            }
         }
+        lblErrorMessage.setVisible(true);
     }
 }
