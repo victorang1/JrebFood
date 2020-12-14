@@ -4,5 +4,12 @@ public class Chef extends Employee {
     
     private String position;
 
-    // setter getter
+    public String getPosition() {
+        return this.position;
+    }
+
+    public Employee setPosition(String position) {
+        this.position = position;
+        return this;
+    }
 }

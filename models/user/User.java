@@ -1,6 +1,8 @@
 package models.user;
 
-public class User {
+import models.Model;
+
+public class User extends Model {
 
     private Integer userId;
     private String name;
@@ -51,5 +53,16 @@ public class User {
     public User setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
+    }
+    
+    public Boolean createAccount(Integer userId, String name, String address, String email, String phoneNumber,
+            String password) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Model getOne(Integer userId) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -4,5 +4,12 @@ public class Driver extends Employee {
     
     private String licensePlate;
 
-    // setter getter
+    public String getLicensePlate() {
+        return this.licensePlate;
+    }
+
+    public Employee setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+        return this;
+    }
 }
