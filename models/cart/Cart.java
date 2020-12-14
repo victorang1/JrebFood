@@ -2,7 +2,7 @@ package models.cart;
 
 import java.util.ArrayList;
 
-import models.Model;
+import core.Model;
 import models.food.Food;
 import models.user.User;
 

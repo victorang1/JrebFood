@@ -1,6 +1,6 @@
 package models.user;
 
-import models.Model;
+import core.Model;
 
 public class User extends Model {
 

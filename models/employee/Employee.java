@@ -3,7 +3,7 @@ package models.employee;
 import java.util.ArrayList;
 import java.util.Date;
 
-import models.Model;
+import core.Model;
 import models.Role;
 
 public class Employee extends Model {

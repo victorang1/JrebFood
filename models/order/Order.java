@@ -3,7 +3,7 @@ package models.order;
 import java.util.ArrayList;
 import java.util.Date;
 
-import models.Model;
+import core.Model;
 import models.user.User;
 
 public class Order extends Model {

@@ -2,7 +2,7 @@ package models.food;
 
 import java.util.ArrayList;
 
-import models.Model;
+import core.Model;
 
 public class Food extends Model {
 

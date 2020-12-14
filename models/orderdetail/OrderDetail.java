@@ -2,7 +2,7 @@ package models.orderdetail;
 
 import java.util.ArrayList;
 
-import models.Model;
+import core.Model;
 import models.food.Food;
 
 public class OrderDetail extends Model {
