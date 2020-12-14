@@ -1,10 +1,10 @@
-package views;
+package views.cart;
 
 import core.View;
 
-public class ManageCartView extends View {
+public class CartView extends View {
 
-    public ManageCartView() {
+    public CartView() {
         super(100, 100);
     }
     
@@ -19,7 +19,7 @@ public class ManageCartView extends View {
         // TODO Auto-generated method stub
         
     }
-    
+
     @Override
     protected void initListener() {
         // TODO Auto-generated method stub
