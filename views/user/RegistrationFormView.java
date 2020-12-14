@@ -1,14 +1,15 @@
-package views;
+package views.user;
 
 import core.View;
 
-public class CartView extends View {
-
-    public CartView() {
-        super(100, 100);
-    }
+public class RegistrationFormView extends View {
     
-    @Override
+    public RegistrationFormView() {
+		super(100, 100);
+		//TODO Auto-generated constructor stub
+	}
+
+	@Override
     protected void onInitView() {
         // TODO Auto-generated method stub
         

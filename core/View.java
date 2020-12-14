@@ -4,10 +4,12 @@ import javax.swing.JFrame;
 
 public abstract class View extends JFrame {
 
-    protected int frameWidth;
-	protected int frameHeight;
+    protected Integer frameWidth;
+	protected Integer frameHeight;
 
-    public void View() {
+    public View(Integer frameWidth, Integer frameHeight) {
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
         onInitView();
         onViewCreated();
         initListener();
