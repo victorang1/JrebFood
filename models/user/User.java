@@ -90,16 +90,22 @@ public class User extends Model {
         }
     }
 
-    public Boolean login(String email, String password) {
+    public Model login(String email, String password) {
         try {
             String rawQuery = String.format("SELECT * FROM %s WHERE email=? AND password=?", tableName);
             PreparedStatement result = execQuery(rawQuery);
             result.setString(1, email);
             result.setString(2, password);
-            return result.executeQuery().isBeforeFirst();
+            ResultSet rs = result.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                Integer userId = rs.getInt("userId");
+                user.userId = userId;
+                return user;
+            }
+            throw new Exception();
         } catch(Exception e) {
-            e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

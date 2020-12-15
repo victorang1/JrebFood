@@ -1,9 +1,9 @@
-import views.LandingView;
+import controllers.UserHandler;
 
 public class JrebFood {
 
     public JrebFood() {
-        new LandingView();
+        UserHandler.getInstance().viewRegistrationForm();
     }
 
     public static void main(String[] args) {

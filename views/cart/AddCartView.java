@@ -8,12 +8,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controllers.CartHandler;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import core.View;
+import models.Session;
 
 public class AddCartView extends View implements ActionListener {
 
@@ -70,7 +73,10 @@ public class AddCartView extends View implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnAdd)) {
-            
+            Integer userId = Session.getInstance().getUserId();
+            Integer foodId = Integer.parseInt(etFoodId.getText());
+            Integer qty = Integer.parseInt(etQty.getText());
+            CartHandler.getInstance().addToCart(userId, foodId, qty);
         }
 	}
 }

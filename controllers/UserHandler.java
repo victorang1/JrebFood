@@ -3,8 +3,10 @@ package controllers;
 import core.Controller;
 import core.Model;
 import core.View;
+import models.Session;
 import models.user.User;
 import util.StringUtil;
+import views.LandingView;
 import views.user.LoginFormView;
 import views.user.RegistrationFormView;
 
@@ -34,7 +36,11 @@ public class UserHandler extends Controller {
         User user = new User();
         user.setName(name)
             .setPassword(password);
-        return user.login(name, password);
+        User result = (User) user.login(name, password);
+        if (result != null) {
+            Session.getInstance().createLoginSession(result.getUserId());
+        }
+        return result != null;
     }
 
     public Model getOne(Integer userId) {
@@ -67,5 +73,9 @@ public class UserHandler extends Controller {
 
     public View viewLoginForm() {
         return new LoginFormView();
+    }
+
+    public View viewLandingView() {
+        return new LandingView();
     }
 }

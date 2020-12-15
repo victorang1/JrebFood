@@ -3,8 +3,8 @@ package views.user;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
-import java.util.logging.Handler;
 import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controllers.FoodHandler;
 import controllers.UserHandler;
 import core.View;
 
@@ -27,7 +28,7 @@ public class LoginFormView extends View implements ActionListener {
     private JButton btnLogin;
 
     public LoginFormView() {
-        super(250, 170);
+        super(250, 220);
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class LoginFormView extends View implements ActionListener {
         lblEmail = new JLabel("Email: ");
         lblPassword = new JLabel("Password: ");
         lblFormTitle = new JLabel("Login Form");
-        lblErrorMessage = new JLabel("Invalid!");
+        lblErrorMessage = new JLabel();
         
         etEmail = new JTextField();
         etPassword = new JTextField();
@@ -48,7 +49,7 @@ public class LoginFormView extends View implements ActionListener {
 
     @Override
     protected void onViewCreated() {
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.PAGE_AXIS));
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         contentPanel.add(lblEmail);
@@ -58,6 +59,7 @@ public class LoginFormView extends View implements ActionListener {
         contentPanel.add(etPassword);
 
         lblFormTitle.setAlignmentX(CENTER_ALIGNMENT);
+        formPanel.add(backButton);
         formPanel.add(lblFormTitle);
 
         formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -79,12 +81,17 @@ public class LoginFormView extends View implements ActionListener {
     @Override
     protected void initListener() {
         btnLogin.addActionListener(this);
+        backButton.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnLogin)) {
             login();
+        }
+        else if (e.getSource().equals(backButton)) {
+            dispose();
+            UserHandler.getInstance().viewRegistrationForm();
         }
     }
 
@@ -101,12 +108,13 @@ public class LoginFormView extends View implements ActionListener {
                 try {
                     Thread.sleep(1000);
                     dispose();
+                    UserHandler.getInstance().viewLandingView();
                 } catch(Exception e) {
-                    
+                    e.printStackTrace();
                 }
             }
             else {
-                lblErrorMessage.setText("Something went wrong");
+                lblErrorMessage.setText("Incorrect username/password");
             }
         }
         lblErrorMessage.setVisible(true);

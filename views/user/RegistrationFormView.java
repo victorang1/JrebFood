@@ -23,10 +23,10 @@ public class RegistrationFormView extends View implements ActionListener {
     private JLabel lblFormTitle, lblErrorMessage;
     private JLabel lblName, lblAddress, lblEmail, lblPhoneNumber, lblPassword;
     private JTextField etName, etAddress, etEmail, etPhoneNumber, etPassword;
-    private JButton btnCreate;
+    private JButton btnCreate, btnGoToLogin;
 
     public RegistrationFormView() {
-        super(300, 280);
+        super(300, 300);
 	}
 
 	@Override
@@ -49,6 +49,7 @@ public class RegistrationFormView extends View implements ActionListener {
         etPassword = new JTextField();
 
         btnCreate = new JButton("Register");
+        btnGoToLogin = new JButton("Go To Login");
     }
 
     @Override
@@ -79,7 +80,10 @@ public class RegistrationFormView extends View implements ActionListener {
         formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         btnCreate.setAlignmentX(CENTER_ALIGNMENT);
+        btnGoToLogin.setAlignmentX(CENTER_ALIGNMENT);
         formPanel.add(btnCreate);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(btnGoToLogin);
         formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         lblErrorMessage.setForeground(Color.RED);
@@ -93,12 +97,17 @@ public class RegistrationFormView extends View implements ActionListener {
     @Override
     protected void initListener() {
         btnCreate.addActionListener(this);
+        btnGoToLogin.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnCreate)) {
             register();
+        }
+        else if (e.getSource().equals(btnGoToLogin)) {
+            dispose();
+            UserHandler.getInstance().viewLoginForm();
         }
     }
 
