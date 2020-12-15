@@ -39,17 +39,16 @@ public class FoodHandler extends Controller {
     }
 
     public Boolean checkStatus(Food food) {
-        return null;
+        return food.getStatus().equals("true");
     }
 
     public Model getFood(Integer foodId) {
-        // TODO Auto-generated method stub
-        return null;
+        Food food = new Food();
+        return food.getFood(foodId);
     }
 
     public Vector<Model> viewAll() {
-        // TODO Auto-generated method stub
-        return new Vector<>();
+        return new Food().viewAll();
     }
 
     public View viewMenu() {

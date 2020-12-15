@@ -3,7 +3,6 @@ package views.user;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -15,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controllers.FoodHandler;
 import controllers.UserHandler;
 import core.View;
 
@@ -105,13 +103,8 @@ public class LoginFormView extends View implements ActionListener {
         else {
             if (userHandler.login(email, password)) {
                 lblErrorMessage.setText("Login Success, redirecting to menu page...");
-                try {
-                    Thread.sleep(1000);
-                    dispose();
-                    UserHandler.getInstance().viewLandingView();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
+                dispose();
+                UserHandler.getInstance().viewLandingView();
             }
             else {
                 lblErrorMessage.setText("Incorrect username/password");

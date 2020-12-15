@@ -20,7 +20,6 @@ import controllers.FoodHandler;
 import core.Model;
 import core.View;
 import models.food.Food;
-import views.cart.AddCartView;
 
 public class MenuView extends View implements ActionListener {
 
@@ -82,6 +81,7 @@ public class MenuView extends View implements ActionListener {
         header = new Vector<>();
         menu = new Vector<>();
         
+        header.add("Food ID");
 		header.add("Food Name");
 		header.add("Food Price");
         header.add("Food Description");
@@ -92,7 +92,8 @@ public class MenuView extends View implements ActionListener {
 		for(Model model : listMenu) {
 			Food food = (Food) model;
 			detail = new Vector<>();
-			
+            
+            detail.add(food.getFoodId().toString());
 			detail.add(food.getName());
 			detail.add(food.getPrice().toString());
 			detail.add(food.getDescription());

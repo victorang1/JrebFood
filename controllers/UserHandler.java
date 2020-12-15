@@ -23,20 +23,11 @@ public class UserHandler extends Controller {
     
     public Boolean createAccount(String name, String address, String email, String phoneNumber,
             String password) {
-        User user = new User();
-        user.setName(name)
-            .setAddress(address)
-            .setEmail(email)
-            .setPhoneNumber(phoneNumber)
-            .setPassword(password);
-        return user.createAccount(name, address, email, phoneNumber, password);
+        return new User().createAccount(name, address, email, phoneNumber, password);
     }
 
     public Boolean login(String name, String password) {
-        User user = new User();
-        user.setName(name)
-            .setPassword(password);
-        User result = (User) user.login(name, password);
+        User result = (User) new User().login(name, password);
         if (result != null) {
             Session.getInstance().createLoginSession(result.getUserId());
         }
@@ -49,10 +40,7 @@ public class UserHandler extends Controller {
     }
 
     public Boolean validateUnique(String email, String phoneNumber) {
-        User user = new User();
-        user.setEmail(email)
-            .setPhoneNumber(phoneNumber);
-        return user.checkIfUserExists(email, phoneNumber);
+        return new User().checkIfUserExists(email, phoneNumber);
     }
 
     public Boolean validateFields(String email, String phoneNumber) {

@@ -1,10 +1,13 @@
 package controllers;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 import core.Controller;
 import core.Model;
 import core.View;
+import models.Session;
+import models.cart.Cart;
+import models.food.Food;
 import views.cart.AddCartView;
 
 public class CartHandler extends Controller {
@@ -19,8 +22,19 @@ public class CartHandler extends Controller {
     }
 
     public Boolean addToCart(Integer userId, Integer foodId, Integer qty) {
-        // TODO Auto-generated method stub
-        return null;
+        Food food = (Food) FoodHandler.getInstance().getFood(foodId);
+        if (food == null) {
+            setErrorMessage("Food not found");
+            return false;
+        }
+        if (!FoodHandler.getInstance().checkStatus(food)) {
+            setErrorMessage("Food is not available");
+            return false;
+        }
+        if (isFoodExists(food.getName()))
+            return updateQty(userId, foodId, qty);
+        else
+            return new Cart().addToCart(userId, foodId, qty);
     }
 
     public Boolean removeFromCart(Integer userId, Integer foodId) {
@@ -33,18 +47,23 @@ public class CartHandler extends Controller {
         
     }
 
-    public Boolean isFoodExists() {
-        return null;
+    public Boolean isFoodExists(String name) {
+        Vector<Model> carts = viewAll(Session.getInstance().getUserId());
+        for (Model model: carts) {
+            Cart cart = (Cart) model;
+            if (cart.getFood().getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Boolean updateQty(Integer userId, Integer foodId, Integer qty) {
-        // TODO Auto-generated method stub
-        return null;
+        return new Cart().updateQty(userId, foodId, qty);
     }
 
-    public ArrayList<Model> viewAll(Integer userId) {
-        // TODO Auto-generated method stub
-        return null;
+    public Vector<Model> viewAll(Integer userId) {
+        return new Cart().viewAll(userId);
     }
 
     public View viewAddCart() {
