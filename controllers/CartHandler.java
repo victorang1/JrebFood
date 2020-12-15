@@ -9,6 +9,7 @@ import models.Session;
 import models.cart.Cart;
 import models.food.Food;
 import views.cart.AddCartView;
+import views.cart.ManageCartFormView;
 
 public class CartHandler extends Controller {
 
@@ -38,8 +39,7 @@ public class CartHandler extends Controller {
     }
 
     public Boolean removeFromCart(Integer userId, Integer foodId) {
-        // TODO Auto-generated method stub
-        return null;
+        return new Cart().removeFromCart(userId, foodId);
     }
 
     public void removeAll(Integer userId) {
@@ -71,6 +71,6 @@ public class CartHandler extends Controller {
     }
     
     public View viewManageCartForm() {
-        return null;
+        return new ManageCartFormView();
     }
 }

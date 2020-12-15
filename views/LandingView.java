@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import controllers.CartHandler;
 import controllers.FoodHandler;
 import core.View;
 
@@ -61,6 +62,9 @@ public class LandingView extends View implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnViewMenu)) {
             FoodHandler.getInstance().viewMenu();
+        }
+        else if (e.getSource().equals(btnViewCart)) {
+            CartHandler.getInstance().viewManageCartForm();
         }
 	}
 }

@@ -71,8 +71,17 @@ public class Cart extends Model {
     }
 
     public Boolean removeFromCart(Integer userId, Integer foodId) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("DELETE FROM %s WHERE userId=? AND foodId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, userId);
+            result.setInt(2, foodId);
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void removeAll(Integer userId) {
