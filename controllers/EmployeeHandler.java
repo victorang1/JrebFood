@@ -9,6 +9,7 @@ import core.View;
 import models.employee.Employee;
 import models.employee.EmployeeModel;
 import views.employee.ChefLandingView;
+import views.employee.ChefMenuFormView;
 import views.employee.DriverLandingView;
 import views.employee.ManageEmployeeFormView;
 import views.employee.ManagerLandingView;
@@ -58,6 +59,10 @@ public class EmployeeHandler extends Controller {
 
     public View viewManageEmployeeForm() {
         return new ManageEmployeeFormView();
+    }
+    
+    public View chefForm() {
+    	return new ChefMenuFormView();
     }
 
     public View viewLandingView() {

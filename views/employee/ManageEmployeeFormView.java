@@ -115,7 +115,6 @@ public class ManageEmployeeFormView extends View implements ActionListener {
 		landingPanel.add(hirePanel);
 		landingPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 		landingPanel.add(firePanel);
-
 		add(landingPanel);
 	}
 
