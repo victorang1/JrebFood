@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 
 public class AppDatabase {
@@ -44,6 +45,16 @@ public class AppDatabase {
         PreparedStatement ps = null;
         try {
             ps = connection.prepareStatement(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ps;
+    }
+
+    public PreparedStatement executeQueryWithKeys(String query) {
+        PreparedStatement ps = null;
+        try {
+            ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         } catch (Exception e) {
             e.printStackTrace();
         }

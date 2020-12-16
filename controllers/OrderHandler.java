@@ -9,12 +9,23 @@ import core.Model;
 import core.View;
 import models.cart.Cart;
 import models.order.Order;
+import models.order.OrderModel;
+import models.orderdetail.OrderDetail;
+import models.orderdetail.OrderDetailModel;
 import models.user.User;
 import util.DateUtil;
 
 public class OrderHandler extends Controller {
 
     private static OrderHandler instance;
+    private OrderModel model;
+    private OrderDetailModel detailModel;
+    public Integer lastCheckoutOrderId = -1;
+    
+    private OrderHandler() {
+        model = new Order();
+        detailModel = new OrderDetail();
+    }
 
     public static OrderHandler getInstance() {
         if (instance == null) {
@@ -25,12 +36,16 @@ public class OrderHandler extends Controller {
     
     public Boolean addOrder(User user) {
         Date currentDate = DateUtil.getCurrentDateWithTimezone();
-        if (new Order().addOrder(user, currentDate)) {
+        int lastInsertedOrderId = model.addOrder(user, currentDate);
+        if (lastInsertedOrderId != -1) {
+            lastCheckoutOrderId = lastInsertedOrderId;
             Vector<Model> userCarts = CartHandler.getInstance().viewAll(user.getUserId());
             for (Model model: userCarts) {
                 Cart cart = (Cart) model;
-                // new OrderDetail().addDetail(orderId, foodId, qty);
+                detailModel.addDetail(lastInsertedOrderId, cart.getFood().getFoodId(), cart.getQty());
             }
+            CartHandler.getInstance().removeAll(user.getUserId());
+            return true;
         }
         return false;
     }
@@ -41,13 +56,27 @@ public class OrderHandler extends Controller {
     }
 
     public Boolean removeOrder(Integer orderId) {
-		// TODO Auto-generated method stub
-		return null;
+        Order order = (Order) model.getOne(orderId);
+        if (order != null) {
+            if (validateStatus(order.getStatus())) {
+                model.removeOrder(orderId);
+                model.removeDetail(orderId);
+                setErrorMessage("Cancel Success");
+                return true;
+            }
+            else {
+                setErrorMessage("Driver has taken the order");
+                return false;
+            }
+        }
+        else {
+            setErrorMessage("Error occured");
+            return false;
+        }
 	}
 
 	public void removeDetail(Integer orderId) {
-		// TODO Auto-generated method stub
-		
+		model.removeDetail(orderId);
 	}
 
 	public Model getOne(Integer orderId) {
@@ -55,21 +84,20 @@ public class OrderHandler extends Controller {
 		return null;
 	}
     
-    public ArrayList<Model> viewAllHistory(Integer id) {
+    public Vector<Model> viewAllHistory(Integer id) {
         return null;
     }
 
-    public ArrayList<Model> viewById(Integer orderId) {
+    public Vector<Model> viewById(Integer orderId) {
         return null;
     }
 
-    public ArrayList<Model> viewOrderList(Integer orderId) {
+    public Vector<Model> viewOrderList(Integer orderId) {
         return null;
     }
 
-    public ArrayList<Model> viewDetailById(Integer orderId) {
-		// TODO Auto-generated method stub
-		return null;
+    public Vector<Model> viewDetailById(Integer orderId) {
+		return model.viewDetailById(orderId);
     }
 
     public Boolean updateStatus(Integer orderId, String status) {
@@ -80,6 +108,10 @@ public class OrderHandler extends Controller {
 	public Boolean takeOrder(Integer orderId, Integer driverId) {
 		// TODO Auto-generated method stub
 		return null;
+    }
+
+    private Boolean validateStatus(String status) {
+        return status.equalsIgnoreCase("Not Accepted");
     }
     
     public View viewTakenOrder() {

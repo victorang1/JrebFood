@@ -8,7 +8,7 @@ import models.user.User;
 
 public interface OrderModel {
     
-    public Boolean addOrder(User user, Date date);
+    public Integer addOrder(User user, Date date);
     public void addDetail(Integer orderId, Integer foodId, Integer qty);
     public Model getOne(Integer orderId);
     // Todo jadiin status jadi class tersendiri

@@ -6,11 +6,17 @@ import core.Controller;
 import core.Model;
 import core.View;
 import models.food.Food;
+import models.food.FoodModel;
 import views.food.MenuView;
 
 public class FoodHandler extends Controller {
 
     private static FoodHandler instance;
+    private FoodModel model;
+
+    private FoodHandler() {
+        model = new Food();
+    }
 
     public static FoodHandler getInstance() {
         if (instance == null) {
@@ -43,12 +49,11 @@ public class FoodHandler extends Controller {
     }
 
     public Model getFood(Integer foodId) {
-        Food food = new Food();
-        return food.getFood(foodId);
+        return model.getFood(foodId);
     }
 
     public Vector<Model> viewAll() {
-        return new Food().viewAll();
+        return model.viewAll();
     }
 
     public View viewMenu() {

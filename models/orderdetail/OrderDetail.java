@@ -1,5 +1,6 @@
 package models.orderdetail;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -10,6 +11,10 @@ public class OrderDetail extends Model implements OrderDetailModel {
 
 	private Food food;
 	private Integer qty;
+
+	public OrderDetail() {
+		this.tableName = "orderdetail";
+	}
 
 	public Food getFood() {
 		return this.food;
@@ -28,8 +33,16 @@ public class OrderDetail extends Model implements OrderDetailModel {
 	}
 
 	public void addDetail(Integer orderId, Integer foodId, Integer qty) {
-		// TODO Auto-generated method stub
-		
+		try {
+            String rawQuery = String.format("INSERT INTO %s VALUES (?, ?, ?)", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, orderId);
+            result.setInt(2, foodId);
+            result.setInt(3, qty);
+			result.executeUpdate();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 	}
 
 	@Override

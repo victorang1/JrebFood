@@ -7,6 +7,7 @@ import core.Model;
 import core.View;
 import models.Session;
 import models.cart.Cart;
+import models.cart.CartModel;
 import models.food.Food;
 import views.cart.AddCartView;
 import views.cart.ManageCartFormView;
@@ -14,6 +15,11 @@ import views.cart.ManageCartFormView;
 public class CartHandler extends Controller {
 
     private static CartHandler instance;
+    private CartModel model;
+
+    private CartHandler() {
+        model = new Cart();
+    }
 
     public static CartHandler getInstance() {
         if (instance == null) {
@@ -35,16 +41,15 @@ public class CartHandler extends Controller {
         if (isFoodExists(food.getName()))
             return updateQty(userId, foodId, qty);
         else
-            return new Cart().addToCart(userId, foodId, qty);
+            return model.addToCart(userId, foodId, qty);
     }
 
     public Boolean removeFromCart(Integer userId, Integer foodId) {
-        return new Cart().removeFromCart(userId, foodId);
+        return model.removeFromCart(userId, foodId);
     }
 
     public void removeAll(Integer userId) {
-        // TODO Auto-generated method stub
-        
+        model.removeAll(userId);
     }
 
     public Boolean isFoodExists(String name) {
@@ -59,11 +64,11 @@ public class CartHandler extends Controller {
     }
 
     public Boolean updateQty(Integer userId, Integer foodId, Integer qty) {
-        return new Cart().updateQty(userId, foodId, qty);
+        return model.updateQty(userId, foodId, qty);
     }
 
     public Vector<Model> viewAll(Integer userId) {
-        return new Cart().viewAll(userId);
+        return model.viewAll(userId);
     }
 
     public View viewAddCart() {

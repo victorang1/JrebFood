@@ -88,8 +88,14 @@ public class Cart extends Model implements CartModel {
 
     @Override
     public void removeAll(Integer userId) {
-        // TODO Auto-generated method stub
-        
+        try {
+            String rawQuery = String.format("DELETE FROM %s WHERE userId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, userId);
+            result.executeUpdate();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

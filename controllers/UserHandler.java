@@ -5,6 +5,7 @@ import core.Model;
 import core.View;
 import models.Session;
 import models.user.User;
+import models.user.UserModel;
 import util.StringUtil;
 import views.LandingView;
 import views.user.LoginFormView;
@@ -13,6 +14,11 @@ import views.user.RegistrationFormView;
 public class UserHandler extends Controller {
 
     private static UserHandler instance;
+    private UserModel model;
+
+    private UserHandler() {
+        model = new User();
+    }
 
     public static UserHandler getInstance() {
         if (instance == null) {
@@ -23,11 +29,11 @@ public class UserHandler extends Controller {
     
     public Boolean createAccount(String name, String address, String email, String phoneNumber,
             String password) {
-        return new User().createAccount(name, address, email, phoneNumber, password);
+        return model.createAccount(name, address, email, phoneNumber, password);
     }
 
     public Boolean login(String name, String password) {
-        User result = (User) new User().login(name, password);
+        User result = (User) model.login(name, password);
         if (result != null) {
             Session.getInstance().createLoginSession(result);
         }
@@ -40,7 +46,7 @@ public class UserHandler extends Controller {
     }
 
     public Boolean validateUnique(String email, String phoneNumber) {
-        return new User().checkIfUserExists(email, phoneNumber);
+        return model.checkIfUserExists(email, phoneNumber);
     }
 
     public Boolean validateFields(String email, String phoneNumber) {

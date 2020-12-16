@@ -1,6 +1,7 @@
 package models.order;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -76,20 +77,24 @@ public class Order extends Model implements OrderModel {
 	}
 	
 	@Override
-    public Boolean addOrder(User user, Date date) {
+    public Integer addOrder(User user, Date date) {
         try {
             String rawQuery = String.format("INSERT INTO %s VALUES (default, ?, ?, ?, ?, ?)", tableName);
-            PreparedStatement result = execQuery(rawQuery);
+            PreparedStatement result = execQueryWithKeys(rawQuery);
             result.setTimestamp(1, new java.sql.Timestamp(date.getTime()));
             result.setString(2, user.getAddress());
             result.setInt(3, user.getUserId());
             result.setString(4, null);
             result.setString(5, "Not Accepted");
-            result.executeUpdate();
-            return true;
+			result.executeUpdate();
+			ResultSet rs = result.getGeneratedKeys();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+			throw new Exception();
         } catch(Exception e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
@@ -101,8 +106,21 @@ public class Order extends Model implements OrderModel {
 
 	@Override
 	public Model getOne(Integer orderId) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+            String rawQuery = String.format("SELECT * FROM %s WHERE orderId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, orderId);
+            ResultSet rs = result.executeQuery();
+            if (rs.next()) {
+                Order order = new Order();
+				order.orderId = rs.getInt("orderId");
+				order.status = rs.getString("status");
+                return order;
+            }
+            throw new Exception();
+        } catch(Exception e) {
+            return null;
+        }
 	}
 
 	@Override
@@ -119,14 +137,28 @@ public class Order extends Model implements OrderModel {
 
 	@Override
 	public Boolean removeOrder(Integer orderId) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+            String rawQuery = String.format("DELETE FROM %s WHERE orderId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, orderId);
+			result.executeUpdate();
+			return true;
+        } catch(Exception e) {
+			e.printStackTrace();
+			return false;
+        }
 	}
 
 	@Override
 	public void removeDetail(Integer orderId) {
-		// TODO Auto-generated method stub
-		
+		try {
+            String rawQuery = String.format("DELETE FROM %s WHERE orderId=?", "orderDetail");
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, orderId);
+            result.executeUpdate();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public class ManageCartFormView extends View implements ActionListener {
     private JTable table;
     private JScrollPane sp;
     private JPanel contentPanel, formPanel, actionPanel;
-    private JButton btnDelete, btnOrder;
+    private JButton btnDelete, btnOrder, btnCancel;
     private JLabel lblTitle, lblCartId, lblErrorMessage;
     private JTextField etCartId;
     private Vector<Vector<String>> listCart;
@@ -60,12 +60,15 @@ public class ManageCartFormView extends View implements ActionListener {
 
         btnDelete = new JButton("Delete from Cart");
         btnOrder = new JButton("Checkout");
+        btnCancel = new JButton("Cancel Last Order");
 
         loadCart();
     }
 
     @Override
     protected void onViewCreated() {
+        btnCancel.setVisible(false);
+        
         lblErrorMessage.setVisible(false);
         lblErrorMessage.setForeground(Color.RED);
         sp.setAlignmentX(LEFT_ALIGNMENT);
@@ -86,6 +89,8 @@ public class ManageCartFormView extends View implements ActionListener {
         actionPanel.add(btnDelete);
         actionPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         actionPanel.add(btnOrder);
+        actionPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        actionPanel.add(btnCancel);
         
         lblTitle.setAlignmentX(LEFT_ALIGNMENT);
         contentPanel.add(backButton);
@@ -109,6 +114,7 @@ public class ManageCartFormView extends View implements ActionListener {
     protected void initListener() {
         btnDelete.addActionListener(this);
         btnOrder.addActionListener(this);
+        btnCancel.addActionListener(this);
     }
 
     public void loadCart() {
@@ -175,6 +181,8 @@ public class ManageCartFormView extends View implements ActionListener {
                 if(dialogResult == 0) {
                     if (OrderHandler.getInstance().addOrder(Session.getInstance().getUser())) {
                         lblErrorMessage.setText("Order Success!");
+                        loadCart();
+                        btnCancel.setVisible(true);
                     }
                     else {
                         lblErrorMessage.setText("Something wrong occured while checkout");
@@ -184,6 +192,10 @@ public class ManageCartFormView extends View implements ActionListener {
             else {
                 lblErrorMessage.setText("Cannot order. Cart is empty!");
             }
+        }
+        else if(e.getSource().equals(btnCancel)) {
+            OrderHandler.getInstance().removeOrder(OrderHandler.getInstance().lastCheckoutOrderId);
+            lblErrorMessage.setText(OrderHandler.getInstance().getErrorMessage());
         }
     }
 
