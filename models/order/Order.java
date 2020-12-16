@@ -14,8 +14,8 @@ public class Order extends Model implements OrderModel {
 	private Integer orderId;
     private Date date;
     private String address;
-    private String userId;
-    private String driverId;
+    private Integer userId;
+    private Integer driverId;
 	private String status;
 
 	public Order() {
@@ -49,20 +49,20 @@ public class Order extends Model implements OrderModel {
 		return this;
 	}
 
-	public String getUserId() {
+	public Integer getUserId() {
 		return this.userId;
 	}
 
-	public Order setUserId(String userId) {
+	public Order setUserId(Integer userId) {
 		this.userId = userId;
 		return this;
 	}
 
-	public String getDriverId() {
+	public Integer getDriverId() {
 		return this.driverId;
 	}
 
-	public Order setDriverId(String driverId) {
+	public Order setDriverId(Integer driverId) {
 		this.driverId = driverId;
 		return this;
 	}
@@ -163,8 +163,27 @@ public class Order extends Model implements OrderModel {
 
 	@Override
 	public Vector<Model> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Vector<Model> data = new Vector<>();
+		try {
+            String rawQuery = String.format("SELECT * FROM %s", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            ResultSet rs = result.executeQuery();
+			while(rs.next()) {
+				Order order = new Order();
+				order.setOrderId(rs.getInt("orderId"));
+				order.setDate(rs.getDate("date"));
+                order.setAddress(rs.getString("address"));
+				order.setDriverId(rs.getInt("driverId"));
+				order.setStatus(rs.getString("status"));
+				order.setUserId(rs.getInt("userId"));
+				
+				data.add(order);
+			}
+			return data;
+		} catch (Exception e) {
+            e.printStackTrace();
+		}
+        return data;
 	}
 
 	@Override

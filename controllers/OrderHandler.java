@@ -1,12 +1,12 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
 import core.Controller;
 import core.Model;
 import core.View;
+import models.Session;
 import models.cart.Cart;
 import models.order.Order;
 import models.order.OrderModel;
@@ -14,6 +14,10 @@ import models.orderdetail.OrderDetail;
 import models.orderdetail.OrderDetailModel;
 import models.user.User;
 import util.DateUtil;
+import views.order.DetailsView;
+import views.order.HistoryView;
+import views.order.OrdersView;
+import views.order.UserOrdersView;
 
 public class OrderHandler extends Controller {
 
@@ -61,7 +65,7 @@ public class OrderHandler extends Controller {
             if (validateStatus(order.getStatus())) {
                 model.removeOrder(orderId);
                 model.removeDetail(orderId);
-                setErrorMessage("Cancel Success");
+                setErrorMessage("Cancel Order Success");
                 return true;
             }
             else {
@@ -85,15 +89,40 @@ public class OrderHandler extends Controller {
 	}
     
     public Vector<Model> viewAllHistory(Integer id) {
-        return null;
-    }
+        Vector<Model> userOrderHistories = new Vector<>();
+        for (Model m : model.getAll()) {
+            Order order = (Order) m;
+            if (order.getUserId().equals(id) && order.getStatus().equals("Finished")) {
+                userOrderHistories.add(order);
+            }
+        }
+        return userOrderHistories;
+     }
 
     public Vector<Model> viewById(Integer orderId) {
         return null;
     }
 
-    public Vector<Model> viewOrderList(Integer orderId) {
-        return null;
+    public Vector<Model> viewOrderList(String status) {
+        Vector<Model> orders = new Vector<>();
+        for (Model m : model.getAll()) {
+            Order order = (Order) m;
+            if (order.getStatus().equals(status)) {
+                orders.add(order);
+            }
+        }
+        return orders;
+    }
+
+    public Vector<Model> getUserOrders() {
+        Vector<Model> orders = new Vector<>();
+        for (Model m : model.getAll()) {
+            Order order = (Order) m;
+            if (order.getUserId().equals(Session.getInstance().getUserId()) && !order.getStatus().equals("Finished")) {
+                orders.add(order);
+            }
+        }
+        return orders;
     }
 
     public Vector<Model> viewDetailById(Integer orderId) {
@@ -118,12 +147,20 @@ public class OrderHandler extends Controller {
         return null;
     }
 
+    public View viewOrders() {
+        return new OrdersView();
+    }
+
+    public View viewUserOrders() {
+        return new UserOrdersView();
+    }
+
     public View viewDetails() {
-        return null;
+        return new DetailsView();
     }
 
     public View viewHistory() {
-        return null;
+        return new HistoryView();
     }
 
     public View viewManageStatusForm() {

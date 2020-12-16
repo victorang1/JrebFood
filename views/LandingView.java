@@ -15,13 +15,14 @@ import javax.swing.JPanel;
 
 import controllers.CartHandler;
 import controllers.FoodHandler;
+import controllers.OrderHandler;
 import core.View;
 
 public class LandingView extends View implements ActionListener {
 
     private JPanel landingPanel, contentPanel;
     private JLabel lblTitle;
-    private JButton btnViewCart, btnViewMenu;
+    private JButton btnViewCart, btnViewMenu, btnViewOrder;
 
     public LandingView() {
         super(300, 180);
@@ -35,6 +36,7 @@ public class LandingView extends View implements ActionListener {
         
         btnViewCart = new JButton("View Cart");
         btnViewMenu = new JButton("View Menu");
+        btnViewOrder = new JButton("View Order");
     }
 
     @Override
@@ -44,7 +46,7 @@ public class LandingView extends View implements ActionListener {
 
         contentPanel.add(btnViewCart);
         contentPanel.add(btnViewMenu);
-        contentPanel.add(new JButton("Test"));
+        contentPanel.add(btnViewOrder);
 
         landingPanel.add(lblTitle);
         landingPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -56,6 +58,7 @@ public class LandingView extends View implements ActionListener {
     protected void initListener() {
         btnViewCart.addActionListener(this);
         btnViewMenu.addActionListener(this);
+        btnViewOrder.addActionListener(this);
     }
 
 	@Override
@@ -65,6 +68,9 @@ public class LandingView extends View implements ActionListener {
         }
         else if (e.getSource().equals(btnViewCart)) {
             CartHandler.getInstance().viewManageCartForm();
+        }
+        else if (e.getSource().equals(btnViewOrder)) {
+            OrderHandler.getInstance().viewOrders();
         }
 	}
 }

@@ -42,7 +42,6 @@ public class DetailsView extends View implements ActionListener {
         lblStatusValue = new JLabel();
         
         btnCancel = new JButton("Cancel Order");
-        loadOrderData();
 	}
 
 	@Override
@@ -76,7 +75,11 @@ public class DetailsView extends View implements ActionListener {
         }
     }
 
-    private void loadOrderData() {
+    private void loadAllOrder() {
 
+    }
+
+    private void loadHistoryOrder() {
+        
     }
 }
