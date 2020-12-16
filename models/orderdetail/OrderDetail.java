@@ -1,7 +1,7 @@
 package models.orderdetail;
 
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
+import java.sql.ResultSet;
 import java.util.Vector;
 
 import core.Model;
@@ -53,7 +53,33 @@ public class OrderDetail extends Model implements OrderDetailModel {
 
 	@Override
 	public Vector<Model> viewDetailById(Integer orderId) {
-		// TODO Auto-generated method stub
-		return null;
+		Vector<Model> data = new Vector<>();
+		try {
+            String rawQuery = String.format("SELECT * FROM %s a JOIN %s b ON a.foodId = b.foodId WHERE orderId=?", tableName, "food");
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, orderId);
+            ResultSet rs = result.executeQuery();
+			while(rs.next()) {
+				String name = rs.getString("name");
+				Integer price = rs.getInt("price");
+                String desc = rs.getString("description");
+                Integer qty = rs.getInt("qty");
+                
+				Food food = new Food();
+				food.setName(name);
+                food.setPrice(price);
+                food.setDescription(desc);
+
+				OrderDetail detail = new OrderDetail();
+                detail.setFood(food);
+                detail.setQty(qty);
+				
+				data.add(detail);
+			}
+			return data;
+		} catch (Exception e) {
+            e.printStackTrace();
+		}
+        return data;
 	}
 }

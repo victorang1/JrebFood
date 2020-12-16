@@ -4,6 +4,7 @@ import core.Controller;
 import core.Model;
 import core.View;
 import models.Session;
+import models.order.Order;
 import models.user.User;
 import models.user.UserModel;
 import util.StringUtil;
@@ -11,11 +12,13 @@ import views.HomeView;
 import views.LandingView;
 import views.user.LoginFormView;
 import views.user.RegistrationFormView;
+import views.user.UserInformationView;
 
 public class UserHandler extends Controller {
 
     private static UserHandler instance;
     private UserModel model;
+    public Order selectedOrder;
 
     public static final Integer TYPE_USER = 0;
     public static final Integer TYPE_EMPLOYEE = 1;
@@ -29,6 +32,10 @@ public class UserHandler extends Controller {
             instance = new UserHandler();
         }
         return instance;
+    }
+
+    public void setSelectedOrder(Order selectedOrder) {
+        this.selectedOrder = selectedOrder;
     }
     
     public Boolean createAccount(String name, String address, String email, String phoneNumber,
@@ -45,8 +52,7 @@ public class UserHandler extends Controller {
     }
 
     public Model getOne(Integer userId) {
-        // TODO Auto-generated method stub
-        return null;
+        return model.getOne(userId);
     }
 
     public Boolean validateUnique(String email, String phoneNumber) {
@@ -62,7 +68,7 @@ public class UserHandler extends Controller {
     }
 
     public View viewUserInformation() {
-        return null;
+        return new UserInformationView();
     }
 
     public View viewRegistrationForm() {

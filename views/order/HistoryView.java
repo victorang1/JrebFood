@@ -9,12 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.OrderHandler;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import core.Model;

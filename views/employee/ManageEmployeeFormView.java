@@ -145,7 +145,7 @@ public class ManageEmployeeFormView extends View implements ActionListener {
 			String email = etEmail.getText();
 			Date dob = DateUtil.parseDate(etDob.getText());
 			if (dob != null) {
-				EmployeeHandler.getInstance().createEmployee(roleId, name, dob, email, password, "Hired");
+				EmployeeHandler.getInstance().createEmployee(roleId, name, dob, email, password, "hired");
 				lblErrorMessage.setText("Hire Success");
 			}
 			else {

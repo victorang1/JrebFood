@@ -3,6 +3,7 @@ package controllers;
 import java.util.Date;
 import java.util.Vector;
 
+import constants.OrderStatus;
 import core.Controller;
 import core.Model;
 import core.View;
@@ -14,6 +15,7 @@ import models.orderdetail.OrderDetail;
 import models.orderdetail.OrderDetailModel;
 import models.user.User;
 import util.DateUtil;
+import views.order.AvailableOrderView;
 import views.order.DetailsView;
 import views.order.HistoryView;
 import views.order.OrdersView;
@@ -92,7 +94,7 @@ public class OrderHandler extends Controller {
         Vector<Model> userOrderHistories = new Vector<>();
         for (Model m : model.getAll()) {
             Order order = (Order) m;
-            if (order.getUserId().equals(id) && order.getStatus().equals("Finished")) {
+            if (order.getUserId().equals(id) && order.getStatus().equals(OrderStatus.FINISHED)) {
                 userOrderHistories.add(order);
             }
         }
@@ -118,7 +120,7 @@ public class OrderHandler extends Controller {
         Vector<Model> orders = new Vector<>();
         for (Model m : model.getAll()) {
             Order order = (Order) m;
-            if (order.getUserId().equals(Session.getInstance().getUserId()) && !order.getStatus().equals("Finished")) {
+            if (order.getUserId().equals(Session.getInstance().getUserId()) && !order.getStatus().equals(OrderStatus.FINISHED)) {
                 orders.add(order);
             }
         }
@@ -126,7 +128,7 @@ public class OrderHandler extends Controller {
     }
 
     public Vector<Model> viewDetailById(Integer orderId) {
-		return model.viewDetailById(orderId);
+		return detailModel.viewDetailById(orderId);
     }
 
     public Boolean updateStatus(Integer orderId, String status) {
@@ -135,12 +137,11 @@ public class OrderHandler extends Controller {
 	}
 
 	public Boolean takeOrder(Integer orderId, Integer driverId) {
-		// TODO Auto-generated method stub
-		return null;
+		return model.takeOrder(orderId, driverId);
     }
 
     private Boolean validateStatus(String status) {
-        return status.equalsIgnoreCase("Not Accepted");
+        return status.equalsIgnoreCase(OrderStatus.NOT_ACCEPTED);
     }
     
     public View viewTakenOrder() {
@@ -180,6 +181,6 @@ public class OrderHandler extends Controller {
     }
 
     public View viewAvailableOrder() {
-        return null;
+        return new AvailableOrderView();
     }
 }
