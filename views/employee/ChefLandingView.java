@@ -2,9 +2,9 @@ package views.employee;
 
 import core.View;
 
-public class ManageEmployeeFormView extends View {
+public class ChefLandingView extends View {
 
-    public ManageEmployeeFormView() {
+    public ChefLandingView() {
         super(200, 200);
     }
 

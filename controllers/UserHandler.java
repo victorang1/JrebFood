@@ -16,6 +16,9 @@ public class UserHandler extends Controller {
     private static UserHandler instance;
     private UserModel model;
 
+    public static final Integer TYPE_USER = 0;
+    public static final Integer TYPE_EMPLOYEE = 1;
+
     private UserHandler() {
         model = new User();
     }
@@ -32,8 +35,8 @@ public class UserHandler extends Controller {
         return model.createAccount(name, address, email, phoneNumber, password);
     }
 
-    public Boolean login(String name, String password) {
-        User result = (User) model.login(name, password);
+    public Boolean login(String email, String password) {
+        User result = (User) model.login(email, password);
         if (result != null) {
             Session.getInstance().createLoginSession(result);
         }
@@ -66,7 +69,11 @@ public class UserHandler extends Controller {
     }
 
     public View viewLoginForm() {
-        return new LoginFormView();
+        return new LoginFormView(TYPE_USER);
+    }
+    
+    public View viewLoginEmployeeFrom() {
+        return new LoginFormView(TYPE_EMPLOYEE);
     }
 
     public View viewLandingView() {

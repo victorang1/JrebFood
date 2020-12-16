@@ -1,9 +1,9 @@
-import controllers.UserHandler;
+import views.HomeView;
 
 public class JrebFood {
 
     public JrebFood() {
-        UserHandler.getInstance().viewLoginForm();
+        new HomeView();
     }
 
     public static void main(String[] args) {

@@ -115,29 +115,6 @@ public class User extends Model implements UserModel {
     }
 
     @Override
-    public Model loginAsEmployee(String email, String password) {
-        try {
-            String rawQuery = String.format("SELECT * FROM %s WHERE email=? AND password=?", tableName);
-            PreparedStatement result = execQuery(rawQuery);
-            result.setString(1, email);
-            result.setString(2, password);
-            ResultSet rs = result.executeQuery();
-            if (rs.next()) {
-                User user = new User();
-                user.userId = rs.getInt("userId");
-                user.name = rs.getString("name");
-                user.address = rs.getString("address");
-                user.email = rs.getString("email");
-                user.phoneNumber = rs.getString("phoneNumber");
-                return user;
-            }
-            throw new Exception();
-        } catch(Exception e) {
-            return null;
-        }
-    }
-
-    @Override
     public Model getOne(Integer userId) {
         // TODO Auto-generated method stub
         return null;

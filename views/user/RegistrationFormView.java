@@ -19,7 +19,7 @@ import core.View;
 
 public class RegistrationFormView extends View implements ActionListener {
 
-    private JPanel formPanel, contentPanel;
+    private JPanel formPanel, contentPanel, headerPanel;
     private JLabel lblFormTitle, lblErrorMessage;
     private JLabel lblName, lblAddress, lblEmail, lblPhoneNumber, lblPassword;
     private JTextField etName, etAddress, etEmail, etPhoneNumber, etPassword;
@@ -32,6 +32,7 @@ public class RegistrationFormView extends View implements ActionListener {
 	@Override
     protected void onInitView() {
         formPanel = new JPanel();
+        headerPanel = new JPanel();
         contentPanel = new JPanel(new GridLayout(5, 2, 0, 5));
 
         lblName = new JLabel("Name: ");
@@ -57,6 +58,9 @@ public class RegistrationFormView extends View implements ActionListener {
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.PAGE_AXIS));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.LINE_AXIS));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         contentPanel.add(lblName);
         contentPanel.add(etName);
 
@@ -71,10 +75,12 @@ public class RegistrationFormView extends View implements ActionListener {
 
         contentPanel.add(lblPassword);
         contentPanel.add(etPassword);
+        
+        headerPanel.add(backButton);
+        headerPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        headerPanel.add(lblFormTitle);
 
-        lblFormTitle.setAlignmentX(CENTER_ALIGNMENT);
-        formPanel.add(lblFormTitle);
-
+        formPanel.add(headerPanel);
         formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         formPanel.add(contentPanel);
         formPanel.add(Box.createRigidArea(new Dimension(0, 10)));

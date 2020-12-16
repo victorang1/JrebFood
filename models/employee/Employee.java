@@ -1,5 +1,7 @@
 package models.employee;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -15,6 +17,10 @@ public class Employee extends Model implements EmployeeModel {
     private Date dob;
     private String email;
     private String status;
+    
+    public Employee() {
+        tableName = "employee";
+    }
 
     public Integer getId() {
         return this.id;
@@ -75,6 +81,34 @@ public class Employee extends Model implements EmployeeModel {
             String status) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Model loginAsEmployee(String email, String password) {
+        try {
+            String rawQuery = String.format("SELECT * FROM %s a LEFT JOIN %s b ON a.id = b.employeeId LEFT JOIN %s c ON a.id = c.employeeId WHERE email=? AND password=?", tableName, "driver", "chef");
+            PreparedStatement result = execQuery(rawQuery);
+            result.setString(1, email);
+            result.setString(2, password);
+            ResultSet rs = result.executeQuery();
+            if (rs.next()) {
+                Employee employee = new Employee();
+                employee.id = rs.getInt("id");
+                Integer roleId = rs.getInt("roleId");
+                if (roleId == 1) {
+                    employee.role = new Role(roleId, rs.getString("licensePlate"));
+                }
+                else employee.role = new Role(roleId, rs.getString("position"));
+                employee.name = rs.getString("name");
+                employee.dob = rs.getDate("dob");
+                employee.email = rs.getString("email");
+                employee.status = rs.getString("status");
+                return employee;
+            }
+            throw new Exception();
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     @Override

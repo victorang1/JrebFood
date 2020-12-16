@@ -3,7 +3,12 @@ package models;
 public class Role {
     
     private Integer roleId;
-    private String roleName;
+    private String attributes;
+
+    public Role(Integer roleId, String attributes) {
+        this.roleId = roleId;
+        this.attributes = attributes;
+    }
 
     public Integer getRoleId() {
         return this.roleId;
@@ -14,12 +19,12 @@ public class Role {
         return this;
     }
 
-    public String getRoleName() {
-        return this.roleName;
+    public String getAttributes() {
+        return attributes;
     }
 
-    public Role setRoleName(String roleName) {
-        this.roleName = roleName;
+    public Role setAttributes(String attributes) {
+        this.attributes = attributes;
         return this;
     }
 }

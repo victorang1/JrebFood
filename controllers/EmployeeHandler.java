@@ -6,11 +6,22 @@ import java.util.Date;
 import core.Controller;
 import core.Model;
 import core.View;
+import models.employee.Employee;
+import models.employee.EmployeeModel;
+import views.employee.ChefLandingView;
+import views.employee.DriverLandingView;
+import views.employee.ManageEmployeeFormView;
 
 public class EmployeeHandler extends Controller {
 
     private static EmployeeHandler instance;
+    private EmployeeModel model;
+    private static Integer userRoleId = -1;
 
+    private EmployeeHandler() {
+        model = new Employee();
+    }
+    
     public static EmployeeHandler getInstance() {
         if (instance == null) {
             instance = new EmployeeHandler();
@@ -38,7 +49,24 @@ public class EmployeeHandler extends Controller {
         return null;
     }
 
+    public Boolean loginAsEmployee(String email, String password) {
+        Employee result = (Employee) model.loginAsEmployee(email, password);
+        userRoleId = result.getId();
+        return result != null;
+    }
+
     public View viewManageEmployeeForm() {
-        return null;
+        return new ManageEmployeeFormView();
+    }
+
+    public View viewLandingView() {
+        switch (userRoleId) {
+            case 1:
+                return new DriverLandingView();
+            case 2:
+                return new ChefLandingView();
+            default:
+                return viewManageEmployeeForm();
+        }
     }
 }
