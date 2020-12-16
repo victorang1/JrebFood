@@ -1,12 +1,14 @@
 package models.order;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 
 import core.Model;
 import models.user.User;
 
-public class Order extends Model {
+public class Order extends Model implements OrderModel {
 
 	private Integer orderId;
     private Date date;
@@ -14,6 +16,10 @@ public class Order extends Model {
     private String userId;
     private String driverId;
 	private String status;
+
+	public Order() {
+		this.tableName = "`order`";
+	}
 
 	public Integer getOrderId() {
 		return this.orderId;
@@ -68,48 +74,69 @@ public class Order extends Model {
 		this.status = status;
 		return this;
 	}
-    
+	
+	@Override
     public Boolean addOrder(User user, Date date) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("INSERT INTO %s VALUES (default, ?, ?, ?, ?, ?)", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setTimestamp(1, new java.sql.Timestamp(date.getTime()));
+            result.setString(2, user.getAddress());
+            result.setInt(3, user.getUserId());
+            result.setString(4, null);
+            result.setString(5, "Not Accepted");
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
+	@Override
     public void addDetail(Integer orderId, Integer foodId, Integer qty) {
         // TODO Auto-generated method stub
         
     }
 
+	@Override
 	public Model getOne(Integer orderId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public Boolean updateStatus(Integer orderId, String status) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public Boolean takeOrder(Integer orderId, Integer driverId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public Boolean removeOrder(Integer orderId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public void removeDetail(Integer orderId) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public ArrayList<Model> getAll() {
+	@Override
+	public Vector<Model> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ArrayList<Model> viewDetailById(Integer orderId) {
+	@Override
+	public Vector<Model> viewDetailById(Integer orderId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

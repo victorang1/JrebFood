@@ -1,9 +1,11 @@
 package models;
 
+import models.user.User;
+
 public class Session {
     
     private static Session instance;
-    private Integer userId;
+    private User user;
     private Boolean isLoggedIn;
 
     public static Session getInstance() {
@@ -13,12 +15,16 @@ public class Session {
         return instance;
     }
 
-    public void createLoginSession(Integer userId) {
+    public void createLoginSession(User user) {
         this.isLoggedIn = true;
-        this.userId = userId;
+        this.user = user;
     }
 
     public Integer getUserId() {
-        return isLoggedIn ? userId : -1;
+        return isLoggedIn ? user.getUserId() : -1;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

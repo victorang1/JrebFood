@@ -19,18 +19,20 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.CartHandler;
+import controllers.OrderHandler;
 import core.Model;
 import core.View;
 import models.Session;
 import models.cart.Cart;
+import util.CollectionUtil;
 import util.StringUtil;
 
 public class ManageCartFormView extends View implements ActionListener {
 
     private JTable table;
     private JScrollPane sp;
-    private JPanel contentPanel, formPanel;
-    private JButton btnDelete;
+    private JPanel contentPanel, formPanel, actionPanel;
+    private JButton btnDelete, btnOrder;
     private JLabel lblTitle, lblCartId, lblErrorMessage;
     private JTextField etCartId;
     private Vector<Vector<String>> listCart;
@@ -46,6 +48,8 @@ public class ManageCartFormView extends View implements ActionListener {
         currentUserId = Session.getInstance().getUserId();
         contentPanel = new JPanel();
         formPanel = new JPanel();
+        actionPanel = new JPanel();
+
         table = new JTable();
 		sp = new JScrollPane(table);
         lblTitle = new JLabel("List of Cart:");
@@ -55,6 +59,7 @@ public class ManageCartFormView extends View implements ActionListener {
         etCartId = new JTextField();
 
         btnDelete = new JButton("Delete from Cart");
+        btnOrder = new JButton("Checkout");
 
         loadCart();
     }
@@ -71,9 +76,16 @@ public class ManageCartFormView extends View implements ActionListener {
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.LINE_AXIS));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.LINE_AXIS));
+        actionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         formPanel.add(lblCartId);
         formPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         formPanel.add(etCartId);
+
+        actionPanel.add(btnDelete);
+        actionPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        actionPanel.add(btnOrder);
         
         lblTitle.setAlignmentX(LEFT_ALIGNMENT);
         contentPanel.add(backButton);
@@ -83,11 +95,11 @@ public class ManageCartFormView extends View implements ActionListener {
         contentPanel.add(sp);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
-        btnDelete.setAlignmentX(LEFT_ALIGNMENT);
+        actionPanel.setAlignmentX(LEFT_ALIGNMENT);
         contentPanel.add(formPanel);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        contentPanel.add(btnDelete);
-        contentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        contentPanel.add(actionPanel);
+        actionPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         contentPanel.add(lblErrorMessage);
         
         add(contentPanel);
@@ -96,6 +108,7 @@ public class ManageCartFormView extends View implements ActionListener {
     @Override
     protected void initListener() {
         btnDelete.addActionListener(this);
+        btnOrder.addActionListener(this);
     }
 
     public void loadCart() {
@@ -142,13 +155,34 @@ public class ManageCartFormView extends View implements ActionListener {
                 int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog(this,
                     "Are you sure you want to remove cart with food id =" + foodId,
-                    "Title on Box",
+                    "Confirmation Dialog",
                     dialogButton
                 );
                 if(dialogResult == 0) {
                     removeFromCart(foodId);
                 }
-                
+            }
+        }
+        else if (e.getSource().equals(btnOrder)) {
+            lblErrorMessage.setVisible(true);
+            if (!CollectionUtil.isNullOrEmpty(listCart)) {
+                int dialogButton = JOptionPane.YES_NO_OPTION;
+                int dialogResult = JOptionPane.showConfirmDialog(this,
+                    "Are you want to checkout?",
+                    "Confirmation Dialog",
+                    dialogButton
+                );
+                if(dialogResult == 0) {
+                    if (OrderHandler.getInstance().addOrder(Session.getInstance().getUser())) {
+                        lblErrorMessage.setText("Order Success!");
+                    }
+                    else {
+                        lblErrorMessage.setText("Something wrong occured while checkout");
+                    }
+                }
+            }
+            else {
+                lblErrorMessage.setText("Cannot order. Cart is empty!");
             }
         }
     }

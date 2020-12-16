@@ -8,7 +8,7 @@ import core.Model;
 import models.food.Food;
 import models.user.User;
 
-public class Cart extends Model {
+public class Cart extends Model implements CartModel {
 
     private Integer cartId;
     private User user;
@@ -55,6 +55,7 @@ public class Cart extends Model {
         return this;
     }
     
+    @Override
     public Boolean addToCart(Integer userId, Integer foodId, Integer qty) {
         try {
             String rawQuery = String.format("INSERT INTO %s VALUES (default, ?, ?, ?)", tableName);
@@ -70,6 +71,7 @@ public class Cart extends Model {
         }
     }
 
+    @Override
     public Boolean removeFromCart(Integer userId, Integer foodId) {
         try {
             String rawQuery = String.format("DELETE FROM %s WHERE userId=? AND foodId=?", tableName);
@@ -84,11 +86,13 @@ public class Cart extends Model {
         }
     }
 
+    @Override
     public void removeAll(Integer userId) {
         // TODO Auto-generated method stub
         
     }
 
+    @Override
     public Boolean updateQty(Integer userId, Integer foodId, Integer qty) {
         try {
             String rawQuery = String.format("UPDATE %s SET qty=qty+? WHERE userId=? AND foodId=?", tableName);
@@ -104,6 +108,7 @@ public class Cart extends Model {
         }
     }
 
+    @Override
     public Vector<Model> viewAll(Integer userId) {
         Vector<Model> data = new Vector<>();
 		try {

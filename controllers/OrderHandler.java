@@ -1,11 +1,16 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Vector;
 
 import core.Controller;
 import core.Model;
 import core.View;
+import models.cart.Cart;
+import models.order.Order;
 import models.user.User;
+import util.DateUtil;
 
 public class OrderHandler extends Controller {
 
@@ -19,8 +24,15 @@ public class OrderHandler extends Controller {
     }
     
     public Boolean addOrder(User user) {
-        // TODO Auto-generated method stub
-        return null;
+        Date currentDate = DateUtil.getCurrentDateWithTimezone();
+        if (new Order().addOrder(user, currentDate)) {
+            Vector<Model> userCarts = CartHandler.getInstance().viewAll(user.getUserId());
+            for (Model model: userCarts) {
+                Cart cart = (Cart) model;
+                // new OrderDetail().addDetail(orderId, foodId, qty);
+            }
+        }
+        return false;
     }
 
     public void addDetail(Integer orderId, Integer foodId, Integer qty) {

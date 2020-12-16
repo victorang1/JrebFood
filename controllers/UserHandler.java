@@ -29,7 +29,7 @@ public class UserHandler extends Controller {
     public Boolean login(String name, String password) {
         User result = (User) new User().login(name, password);
         if (result != null) {
-            Session.getInstance().createLoginSession(result.getUserId());
+            Session.getInstance().createLoginSession(result);
         }
         return result != null;
     }

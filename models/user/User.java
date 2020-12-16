@@ -99,8 +99,11 @@ public class User extends Model {
             ResultSet rs = result.executeQuery();
             if (rs.next()) {
                 User user = new User();
-                Integer userId = rs.getInt("userId");
-                user.userId = userId;
+                user.userId = rs.getInt("userId");
+                user.name = rs.getString("name");
+                user.address = rs.getString("address");
+                user.email = rs.getString("email");
+                user.phoneNumber = rs.getString("phoneNumber");
                 return user;
             }
             throw new Exception();

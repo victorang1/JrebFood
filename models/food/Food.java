@@ -6,7 +6,7 @@ import java.util.Vector;
 
 import core.Model;
 
-public class Food extends Model {
+public class Food extends Model implements FoodModel {
 
     private Integer foodId;
     private String name;
@@ -63,26 +63,31 @@ public class Food extends Model {
         return this;
     }
     
+    @Override
     public Boolean addFood(String name, Integer price, String description) {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public Boolean deleteFood(Integer foodId) {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public Boolean changeStatus(Integer foodId) {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public Boolean validateName(String name) {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public Model getFood(Integer foodId) {
         try {
             String rawQuery = String.format("SELECT * FROM %s WHERE foodId=?", tableName);
@@ -102,6 +107,7 @@ public class Food extends Model {
         }
     }
 
+    @Override
     public Vector<Model> viewAll() {
         Vector<Model> data = new Vector<>();
         

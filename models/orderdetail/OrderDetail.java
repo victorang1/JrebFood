@@ -1,11 +1,12 @@
 package models.orderdetail;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import core.Model;
 import models.food.Food;
 
-public class OrderDetail extends Model {
+public class OrderDetail extends Model implements OrderDetailModel {
 
 	private Food food;
 	private Integer qty;
@@ -31,12 +32,14 @@ public class OrderDetail extends Model {
 		
 	}
 
+	@Override
 	public Boolean removeOrder(Integer orderId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ArrayList<Model> viewDetailById(Integer orderId) {
+	@Override
+	public Vector<Model> viewDetailById(Integer orderId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
