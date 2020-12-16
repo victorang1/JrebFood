@@ -7,6 +7,7 @@ import models.Session;
 import models.user.User;
 import models.user.UserModel;
 import util.StringUtil;
+import views.HomeView;
 import views.LandingView;
 import views.user.LoginFormView;
 import views.user.RegistrationFormView;
@@ -78,5 +79,9 @@ public class UserHandler extends Controller {
 
     public View viewLandingView() {
         return new LandingView();
+    }
+
+    public View homeView() {
+        return new HomeView();
     }
 }

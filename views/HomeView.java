@@ -22,7 +22,7 @@ public class HomeView extends View implements ActionListener {
     private JButton btnCreateAccount, btnLogin, btnLoginAsEmployee;
 
     public HomeView() {
-        super(200, 200);
+        super(200, 185);
     }
 
 	@Override
@@ -68,12 +68,15 @@ public class HomeView extends View implements ActionListener {
     @Override
 	public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnCreateAccount)) {
+            dispose();
             UserHandler.getInstance().viewRegistrationForm();
         }
         else if (e.getSource().equals(btnLogin)) {
+            dispose();
             UserHandler.getInstance().viewLoginForm();
         }
         else if (e.getSource().equals(btnLoginAsEmployee)) {
+            dispose();
             UserHandler.getInstance().viewLoginEmployeeFrom();
         }
 	}

@@ -77,10 +77,24 @@ public class Employee extends Model implements EmployeeModel {
     }
 
     @Override
-    public Boolean createEmployee(Integer id, Integer roleId, String name, Date dob, String email, String password,
+    public Boolean createEmployee(Integer roleId, String name, Date dob, String email, String password,
             String status) {
-        // TODO Auto-generated method stub
-        return null;
+                try {
+                    String rawQuery = String.format("INSERT INTO %s VALUES (default, ?, ?, ?, ?, ?, ?)", tableName);
+                    PreparedStatement result = execQuery(rawQuery);
+                    result.setInt(1, roleId);
+                    result.setString(2, name);
+                    result.setDate(3, new java.sql.Date(dob.getTime()));
+                    result.setString(4, email);
+                    result.setString(5, password);
+                    result.setString(6, status);
+                    result.executeUpdate();
+                    System.out.println("Ke Create");
+                    return true;
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
     }
 
     @Override
@@ -107,14 +121,23 @@ public class Employee extends Model implements EmployeeModel {
             }
             throw new Exception();
         } catch(Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     @Override
     public Boolean changeStatus(Integer id) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("UPDATE %s SET status='fired' WHERE id=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, id);
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

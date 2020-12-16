@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import controllers.EmployeeHandler;
 import controllers.UserHandler;
 import core.View;
+import views.HomeView;
 
 public class LoginFormView extends View implements ActionListener {
 
@@ -40,7 +41,7 @@ public class LoginFormView extends View implements ActionListener {
 
         lblEmail = new JLabel("Email: ");
         lblPassword = new JLabel("Password: ");
-        lblFormTitle = new JLabel(isUser ? "Login Form" : "Login Employee Form");
+        lblFormTitle = new JLabel("Login Form");
         lblErrorMessage = new JLabel();
         
         etEmail = new JTextField();
@@ -95,6 +96,10 @@ public class LoginFormView extends View implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnLogin)) {
             login();
+        }
+        else if(e.getSource().equals(backButton)) {
+            dispose();
+            UserHandler.getInstance().homeView();
         }
     }
 

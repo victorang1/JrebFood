@@ -11,12 +11,14 @@ import models.employee.EmployeeModel;
 import views.employee.ChefLandingView;
 import views.employee.DriverLandingView;
 import views.employee.ManageEmployeeFormView;
+import views.employee.ManagerLandingView;
 
 public class EmployeeHandler extends Controller {
 
     private static EmployeeHandler instance;
     private EmployeeModel model;
-    private static Integer userRoleId = -1;
+    private Integer userRoleId = -1;
+    private Integer isHire = -1;
 
     private EmployeeHandler() {
         model = new Employee();
@@ -31,13 +33,12 @@ public class EmployeeHandler extends Controller {
     
     public Boolean createEmployee(Integer roleId, String name, Date dob, String email, String password,
             String status) {
-        // TODO Auto-generated method stub
-        return null;
+                System.out.println("kenapgggil");
+        return model.createEmployee(roleId, name, dob, email, password, status);
     }
 
     public Boolean changeStatus(Integer id) {
-        // TODO Auto-generated method stub
-        return null;
+        return model.changeStatus(id);
     }
 
     public Boolean validateFields(String name, Date dob, String email) {
@@ -51,7 +52,7 @@ public class EmployeeHandler extends Controller {
 
     public Boolean loginAsEmployee(String email, String password) {
         Employee result = (Employee) model.loginAsEmployee(email, password);
-        userRoleId = result.getId();
+        if (result != null) userRoleId = result.getRole().getRoleId();
         return result != null;
     }
 
@@ -66,7 +67,7 @@ public class EmployeeHandler extends Controller {
             case 2:
                 return new ChefLandingView();
             default:
-                return viewManageEmployeeForm();
+                return new ManagerLandingView();
         }
     }
 }
