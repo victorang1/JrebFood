@@ -18,6 +18,7 @@ import util.DateUtil;
 import views.order.AvailableOrderView;
 import views.order.DetailsView;
 import views.order.HistoryView;
+import views.order.OrderQueueView;
 import views.order.OrdersView;
 import views.order.TakenOrderView;
 import views.order.UserOrdersView;
@@ -212,7 +213,7 @@ public class OrderHandler extends Controller {
     }
 
     public View viewOrderQueue() {
-        return null;
+        return new OrderQueueView();
     }
 
     public View viewAvailableOrder() {

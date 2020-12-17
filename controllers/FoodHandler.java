@@ -39,8 +39,7 @@ public class FoodHandler extends Controller {
     }
 
     public Boolean changeStatus(Integer foodId) {
-        // TODO Auto-generated method stub
-        return null;
+        return model.changeStatus(foodId);
     }
 
     public Boolean validateInput(String name, Integer price, String description) {

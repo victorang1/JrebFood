@@ -96,8 +96,16 @@ public class Food extends Model implements FoodModel {
 
     @Override
     public Boolean changeStatus(Integer foodId) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("UPDATE %s SET status='false' WHERE foodId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+			result.setInt(1, foodId);
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
