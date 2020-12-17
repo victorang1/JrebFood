@@ -7,6 +7,8 @@ import core.Model;
 import core.View;
 import models.food.Food;
 import models.food.FoodModel;
+import util.StringUtil;
+import views.food.ManageFoodFormView;
 import views.food.MenuView;
 
 public class FoodHandler extends Controller {
@@ -26,13 +28,14 @@ public class FoodHandler extends Controller {
     }
     
     public Boolean addFood(String name, Integer price, String description) {
-        // TODO Auto-generated method stub
-        return null;
+        if (validateInput(name, price, description)) {
+            return model.addFood(name, price, description);
+        }
+        return false;
     }
 
     public Boolean deleteFood(Integer foodId) {
-        // TODO Auto-generated method stub
-        return null;
+        return model.deleteFood(foodId);
     }
 
     public Boolean changeStatus(Integer foodId) {
@@ -41,7 +44,15 @@ public class FoodHandler extends Controller {
     }
 
     public Boolean validateInput(String name, Integer price, String description) {
-        return null;
+        if (StringUtil.isNullOrEmpty(name) || StringUtil.isNullOrEmpty(price.toString()) || StringUtil.isNullOrEmpty(description)) {
+            setErrorMessage("All field must be input!");
+            return false;
+        }
+        if (model.validateName(name)) {
+            setErrorMessage("Food name already exists");
+            return false;
+        }
+        return true;
     }
 
     public Boolean checkStatus(Food food) {
@@ -61,6 +72,6 @@ public class FoodHandler extends Controller {
     }
 
     public View viewManageFoodForm() {
-        return null;
+        return new ManageFoodFormView();
     }
 }

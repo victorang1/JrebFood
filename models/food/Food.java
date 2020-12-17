@@ -65,14 +65,33 @@ public class Food extends Model implements FoodModel {
     
     @Override
     public Boolean addFood(String name, Integer price, String description) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("INSERT INTO %s VALUES (default, ?, ?, ?, ?)", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setString(1, name);
+            result.setInt(2, price);
+            result.setString(3, description);
+            result.setString(4, "true");
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public Boolean deleteFood(Integer foodId) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("DELETE FROM %s WHERE foodId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, foodId);
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -83,8 +102,15 @@ public class Food extends Model implements FoodModel {
 
     @Override
     public Boolean validateName(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("SELECT * FROM %s WHERE name=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setString(1, name);
+            return result.executeQuery().isBeforeFirst();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
