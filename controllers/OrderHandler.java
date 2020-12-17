@@ -19,6 +19,7 @@ import views.order.AvailableOrderView;
 import views.order.DetailsView;
 import views.order.HistoryView;
 import views.order.OrdersView;
+import views.order.TakenOrderView;
 import views.order.UserOrdersView;
 
 public class OrderHandler extends Controller {
@@ -127,13 +128,33 @@ public class OrderHandler extends Controller {
         return orders;
     }
 
+    public Vector<Model> viewOrderList(Integer driverId) {
+        Vector<Model> orders = new Vector<>();
+        for (Model m : model.getAll()) {
+            Order order = (Order) m;
+            if (order.getStatus().equals(OrderStatus.ACCEPTED) && order.getDriverId() == driverId) {
+                orders.add(order);
+            }
+        }
+        return orders;
+    }
+
     public Vector<Model> viewDetailById(Integer orderId) {
 		return detailModel.viewDetailById(orderId);
     }
 
     public Boolean updateStatus(Integer orderId, String status) {
-		// TODO Auto-generated method stub
-		return null;
+        // Diliat dari sequence diagram disini mesti validate status, cmn kita bingung sih
+        // apa yang perlu divalidasi, karena di activity diagram juga tidak digambarkan...
+        // jadi asumsi saya ngecek apakah ordernya sudah accept/blom
+		Order order = (Order) model.getOne(orderId);
+        if (validateStatus(order.getStatus())) {
+            setErrorMessage("This order is not taken yet");
+            return false;
+        }
+        else {
+            return model.updateStatus(orderId, status);
+        }
 	}
 
 	public Boolean takeOrder(Integer orderId, Integer driverId) {
@@ -145,7 +166,7 @@ public class OrderHandler extends Controller {
     }
     
     public View viewTakenOrder() {
-        return null;
+        return new TakenOrderView();
     }
 
     public View viewOrders() {

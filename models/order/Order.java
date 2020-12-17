@@ -126,8 +126,17 @@ public class Order extends Model implements OrderModel {
 
 	@Override
 	public Boolean updateStatus(Integer orderId, String status) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+            String rawQuery = String.format("UPDATE %s SET status=? WHERE orderId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+			result.setString(1, status);
+			result.setInt(2, orderId);
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 	}
 
 	@Override
