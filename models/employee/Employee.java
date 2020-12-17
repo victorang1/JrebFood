@@ -89,7 +89,6 @@ public class Employee extends Model implements EmployeeModel {
                     result.setString(5, password);
                     result.setString(6, status);
                     result.executeUpdate();
-                    System.out.println("Ke Create");
                     return true;
                 } catch(Exception e) {
                     e.printStackTrace();
@@ -112,7 +111,10 @@ public class Employee extends Model implements EmployeeModel {
                 if (roleId == 1) {
                     employee.role = new Role(roleId, rs.getString("licensePlate"));
                 }
-                else employee.role = new Role(roleId, rs.getString("position"));
+                else if (roleId == 2) {
+                    employee.role = new Role(roleId, rs.getString("position"));
+                }
+                else employee.role = new Role(roleId, "");
                 employee.name = rs.getString("name");
                 employee.dob = rs.getDate("dob");
                 employee.email = rs.getString("email");

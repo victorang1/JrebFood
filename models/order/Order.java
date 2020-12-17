@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
+import constants.OrderStatus;
 import core.Model;
 import models.user.User;
 
@@ -125,14 +126,33 @@ public class Order extends Model implements OrderModel {
 
 	@Override
 	public Boolean updateStatus(Integer orderId, String status) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+            String rawQuery = String.format("UPDATE %s SET status=? WHERE orderId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+			result.setString(1, status);
+			result.setInt(2, orderId);
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 	}
 
 	@Override
 	public Boolean takeOrder(Integer orderId, Integer driverId) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+            String rawQuery = String.format("UPDATE %s SET status=?, driverId=? WHERE orderId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+			result.setString(1, OrderStatus.ACCEPTED);
+			result.setInt(2, driverId);
+			result.setInt(3, orderId);
+            result.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 	}
 
 	@Override

@@ -2,5 +2,9 @@
 - Saat user pertama kali masuk harus login terlebih dahulu atau create account
 - Setelah berhasil login akan dioper kemasing-masing landing antara
 halaman landing user / halaman landing employee
-- Get All User DA butuh userid karena asumsi saya ketika user melihat order
+- Di masing halaman landing, terdapat fitur-fitur yang dapat dilakukan
+oleh masing-masing role
+- Menambahkan function getUserOrders karena asumsi saya ketika user melihat order
 hanya order dia yang terlihat
+- Menambahkan function viewTakenOrder(int driverId) untuk mencari semua
+order yang diambil oleh driverId tersebut

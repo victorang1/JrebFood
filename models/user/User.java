@@ -12,7 +12,6 @@ public class User extends Model implements UserModel {
     private String address;
     private String email;
     private String phoneNumber;
-    private String password;
 
     public User() {
         this.tableName = "user";
@@ -62,15 +61,6 @@ public class User extends Model implements UserModel {
         this.phoneNumber = phoneNumber;
         return this;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public User setPassword(String password) {
-        this.password = password;
-        return this;
-    }
     
     @Override
     public Boolean createAccount(String name, String address, String email, String phoneNumber,
@@ -116,8 +106,22 @@ public class User extends Model implements UserModel {
 
     @Override
     public Model getOne(Integer userId) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            String rawQuery = String.format("SELECT * FROM %s WHERE userId=?", tableName);
+            PreparedStatement result = execQuery(rawQuery);
+            result.setInt(1, userId);
+            ResultSet rs = result.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.name = rs.getString("name");
+                user.address = rs.getString("address");
+                user.phoneNumber = rs.getString("phoneNumber");
+                return user;
+            }
+            throw new Exception();
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     @Override

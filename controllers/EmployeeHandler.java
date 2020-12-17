@@ -6,6 +6,7 @@ import java.util.Date;
 import core.Controller;
 import core.Model;
 import core.View;
+import models.Session;
 import models.employee.Employee;
 import models.employee.EmployeeModel;
 import views.employee.ChefLandingView;
@@ -18,8 +19,6 @@ public class EmployeeHandler extends Controller {
 
     private static EmployeeHandler instance;
     private EmployeeModel model;
-    private Integer userRoleId = -1;
-    private Integer isHire = -1;
 
     private EmployeeHandler() {
         model = new Employee();
@@ -34,7 +33,6 @@ public class EmployeeHandler extends Controller {
     
     public Boolean createEmployee(Integer roleId, String name, Date dob, String email, String password,
             String status) {
-                System.out.println("kenapgggil");
         return model.createEmployee(roleId, name, dob, email, password, status);
     }
 
@@ -53,7 +51,9 @@ public class EmployeeHandler extends Controller {
 
     public Boolean loginAsEmployee(String email, String password) {
         Employee result = (Employee) model.loginAsEmployee(email, password);
-        if (result != null) userRoleId = result.getRole().getRoleId();
+        if (result != null) {
+            Session.getInstance().createEmployeeLoginSession(result);
+        }
         return result != null;
     }
 
@@ -66,7 +66,7 @@ public class EmployeeHandler extends Controller {
     }
 
     public View viewLandingView() {
-        switch (userRoleId) {
+        switch (Session.getInstance().getEmployeeRoleId()) {
             case 1:
                 return new DriverLandingView();
             case 2:

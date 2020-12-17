@@ -9,12 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.OrderHandler;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import core.Model;
@@ -64,7 +62,6 @@ public class HistoryView extends View {
 
 	@Override
 	protected void initListener() {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -78,7 +75,8 @@ public class HistoryView extends View {
 		header.add("Driver ID");
         header.add("Status");
 		
-		Vector<Model> histories = OrderHandler.getInstance().viewAllHistory(Session.getInstance().getUserId());
+		Integer id = Session.getInstance().isEmployee() ? Session.getInstance().getEmployeeUserId() : Session.getInstance().getUserId();
+		Vector<Model> histories = OrderHandler.getInstance().viewAllHistory(id);
 		
 		for(Model model : histories) {
 			Order order = (Order) model;

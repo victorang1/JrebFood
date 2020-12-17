@@ -3,6 +3,7 @@ package controllers;
 import java.util.Date;
 import java.util.Vector;
 
+import constants.OrderStatus;
 import core.Controller;
 import core.Model;
 import core.View;
@@ -14,9 +15,11 @@ import models.orderdetail.OrderDetail;
 import models.orderdetail.OrderDetailModel;
 import models.user.User;
 import util.DateUtil;
+import views.order.AvailableOrderView;
 import views.order.DetailsView;
 import views.order.HistoryView;
 import views.order.OrdersView;
+import views.order.TakenOrderView;
 import views.order.UserOrdersView;
 
 public class OrderHandler extends Controller {
@@ -62,7 +65,7 @@ public class OrderHandler extends Controller {
     public Boolean removeOrder(Integer orderId) {
         Order order = (Order) model.getOne(orderId);
         if (order != null) {
-            if (validateStatus(order.getStatus())) {
+            if (validateStatus(order, OrderStatus.NOT_ACCEPTED)) {
                 model.removeOrder(orderId);
                 model.removeDetail(orderId);
                 setErrorMessage("Cancel Order Success");
@@ -92,8 +95,17 @@ public class OrderHandler extends Controller {
         Vector<Model> userOrderHistories = new Vector<>();
         for (Model m : model.getAll()) {
             Order order = (Order) m;
-            if (order.getUserId().equals(id) && order.getStatus().equals("Finished")) {
-                userOrderHistories.add(order);
+            if (order.getStatus().equals(OrderStatus.FINISHED)) {
+                if (Session.getInstance().isEmployee()) {
+                    if (order.getDriverId().equals(id)) {
+                        userOrderHistories.add(order);
+                    }
+                }
+                else {
+                    if (order.getUserId().equals(id)) {
+                        userOrderHistories.add(order);
+                    }
+                }
             }
         }
         return userOrderHistories;
@@ -118,7 +130,20 @@ public class OrderHandler extends Controller {
         Vector<Model> orders = new Vector<>();
         for (Model m : model.getAll()) {
             Order order = (Order) m;
-            if (order.getUserId().equals(Session.getInstance().getUserId()) && !order.getStatus().equals("Finished")) {
+            if (order.getUserId().equals(Session.getInstance().getUserId()) && !order.getStatus().equals(OrderStatus.FINISHED)) {
+                orders.add(order);
+            }
+        }
+        return orders;
+    }
+
+    public Vector<Model> viewOrderList(Integer driverId) {
+        Vector<Model> orders = new Vector<>();
+        for (Model m : model.getAll()) {
+            Order order = (Order) m;
+            if (order.getStatus().equals(OrderStatus.NOT_ACCEPTED)) continue;
+            if (order.getStatus().equals(OrderStatus.FINISHED)) continue;
+            if (order.getDriverId() == driverId) {
                 orders.add(order);
             }
         }
@@ -126,25 +151,36 @@ public class OrderHandler extends Controller {
     }
 
     public Vector<Model> viewDetailById(Integer orderId) {
-		return model.viewDetailById(orderId);
+		return detailModel.viewDetailById(orderId);
     }
 
     public Boolean updateStatus(Integer orderId, String status) {
-		// TODO Auto-generated method stub
-		return null;
+		Order order = (Order) model.getOne(orderId);
+        if (status.equals(OrderStatus.ORDERED)) {
+            if(!validateStatus(order, OrderStatus.ACCEPTED)) {
+                setErrorMessage("Cannot order this food to restaurant");
+                return false;
+            }
+        }
+        else if (status.equals(OrderStatus.FINISHED)) {
+            if(!validateStatus(order, OrderStatus.COOKED)) {
+                setErrorMessage("This order is not cooked yet");
+                return false;
+            }
+        }
+        return model.updateStatus(orderId, status);
 	}
 
 	public Boolean takeOrder(Integer orderId, Integer driverId) {
-		// TODO Auto-generated method stub
-		return null;
+		return model.takeOrder(orderId, driverId);
     }
 
-    private Boolean validateStatus(String status) {
-        return status.equalsIgnoreCase("Not Accepted");
+    private Boolean validateStatus(Order order, String status) {
+        return order.getStatus().equalsIgnoreCase(status);
     }
     
     public View viewTakenOrder() {
-        return null;
+        return new TakenOrderView();
     }
 
     public View viewOrders() {
@@ -180,6 +216,6 @@ public class OrderHandler extends Controller {
     }
 
     public View viewAvailableOrder() {
-        return null;
+        return new AvailableOrderView();
     }
 }
