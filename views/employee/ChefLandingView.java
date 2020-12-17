@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controllers.EmployeeHandler;
+import controllers.FoodHandler;
 import controllers.OrderHandler;
 import core.View;
 
@@ -23,7 +24,7 @@ public class ChefLandingView extends View implements ActionListener {
     private JButton btnViewQueue, viewFoodAvailability,btnFoodForm;
 
     public ChefLandingView() {
-        super(200, 200);
+        super(300, 200);
     }
 
 	@Override
@@ -57,7 +58,6 @@ public class ChefLandingView extends View implements ActionListener {
 
 	@Override
 	protected void initListener() {
-		// TODO Auto-generated method stub
 		btnFoodForm.addActionListener(this);
 		btnViewQueue.addActionListener(this);
 		viewFoodAvailability.addActionListener(this);
@@ -70,7 +70,7 @@ public class ChefLandingView extends View implements ActionListener {
             OrderHandler.getInstance().viewProfit();
         }
         else if (e.getSource().equals(btnFoodForm)) {
-            EmployeeHandler.getInstance().chefForm();
+            FoodHandler.getInstance().viewManageFoodForm();
         }
         else if (e.getSource().equals(btnViewQueue)) {
         	EmployeeHandler.getInstance().viewManageEmployeeForm();
