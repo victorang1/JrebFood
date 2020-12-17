@@ -19,7 +19,7 @@ public class DriverLandingView extends View implements ActionListener {
 
 	private JPanel landingPanel, contentPanel;
     private JLabel lblTitle;
-    private JButton btnTakeOrder, btnOrderToRestaurant, btnDeliver, btnViewOrderList;
+    private JButton btnTakeOrder, btnOrderToRestaurant, btnViewOrderHistory, btnViewOrderList;
 
     public DriverLandingView() {
         super(350, 200);
@@ -33,7 +33,7 @@ public class DriverLandingView extends View implements ActionListener {
         
         btnTakeOrder = new JButton("Take Order");
         btnOrderToRestaurant = new JButton("Order to Restaurant");
-        btnDeliver = new JButton("Deliver to Customer");
+        btnViewOrderHistory = new JButton("View Order History");
         btnViewOrderList = new JButton("View Order List");
 	}
 
@@ -44,8 +44,8 @@ public class DriverLandingView extends View implements ActionListener {
 
         contentPanel.add(btnTakeOrder);
 		contentPanel.add(btnOrderToRestaurant);
-		contentPanel.add(btnDeliver);
-        contentPanel.add(btnViewOrderList);
+		contentPanel.add(btnViewOrderList);
+		contentPanel.add(btnViewOrderHistory);
 
         lblTitle.setAlignmentX(CENTER_ALIGNMENT);
         landingPanel.add(lblTitle);
@@ -58,8 +58,8 @@ public class DriverLandingView extends View implements ActionListener {
 	protected void initListener() {
 		btnTakeOrder.addActionListener(this);
 		btnOrderToRestaurant.addActionListener(this);
-		btnDeliver.addActionListener(this);
 		btnViewOrderList.addActionListener(this);
+		btnViewOrderHistory.addActionListener(this);
 	}
 
 	@Override
@@ -68,13 +68,13 @@ public class DriverLandingView extends View implements ActionListener {
 			OrderHandler.getInstance().viewAvailableOrder();
 		}
 		else if (e.getSource().equals(btnOrderToRestaurant)) {
-
-		}
-		else if (e.getSource().equals(btnDeliver)) {
-
+			OrderHandler.getInstance().viewTakenOrder();
 		}
 		else if (e.getSource().equals(btnViewOrderList)) {
-
+			OrderHandler.getInstance().viewTakenOrder();
+		}
+		else if (e.getSource().equals(btnViewOrderHistory)) {
+			OrderHandler.getInstance().viewHistory();
 		}
 	}
 }

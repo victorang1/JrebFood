@@ -62,7 +62,6 @@ public class HistoryView extends View {
 
 	@Override
 	protected void initListener() {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -76,7 +75,8 @@ public class HistoryView extends View {
 		header.add("Driver ID");
         header.add("Status");
 		
-		Vector<Model> histories = OrderHandler.getInstance().viewAllHistory(Session.getInstance().getUserId());
+		Integer id = Session.getInstance().isEmployee() ? Session.getInstance().getEmployeeUserId() : Session.getInstance().getUserId();
+		Vector<Model> histories = OrderHandler.getInstance().viewAllHistory(id);
 		
 		for(Model model : histories) {
 			Order order = (Order) model;

@@ -65,7 +65,7 @@ public class OrderHandler extends Controller {
     public Boolean removeOrder(Integer orderId) {
         Order order = (Order) model.getOne(orderId);
         if (order != null) {
-            if (validateStatus(order.getStatus())) {
+            if (validateStatus(order, OrderStatus.NOT_ACCEPTED)) {
                 model.removeOrder(orderId);
                 model.removeDetail(orderId);
                 setErrorMessage("Cancel Order Success");
@@ -95,8 +95,17 @@ public class OrderHandler extends Controller {
         Vector<Model> userOrderHistories = new Vector<>();
         for (Model m : model.getAll()) {
             Order order = (Order) m;
-            if (order.getUserId().equals(id) && order.getStatus().equals(OrderStatus.FINISHED)) {
-                userOrderHistories.add(order);
+            if (order.getStatus().equals(OrderStatus.FINISHED)) {
+                if (Session.getInstance().isEmployee()) {
+                    if (order.getDriverId().equals(id)) {
+                        userOrderHistories.add(order);
+                    }
+                }
+                else {
+                    if (order.getUserId().equals(id)) {
+                        userOrderHistories.add(order);
+                    }
+                }
             }
         }
         return userOrderHistories;
@@ -132,7 +141,9 @@ public class OrderHandler extends Controller {
         Vector<Model> orders = new Vector<>();
         for (Model m : model.getAll()) {
             Order order = (Order) m;
-            if (order.getStatus().equals(OrderStatus.ACCEPTED) && order.getDriverId() == driverId) {
+            if (order.getStatus().equals(OrderStatus.NOT_ACCEPTED)) continue;
+            if (order.getStatus().equals(OrderStatus.FINISHED)) continue;
+            if (order.getDriverId() == driverId) {
                 orders.add(order);
             }
         }
@@ -144,25 +155,28 @@ public class OrderHandler extends Controller {
     }
 
     public Boolean updateStatus(Integer orderId, String status) {
-        // Diliat dari sequence diagram disini mesti validate status, cmn kita bingung sih
-        // apa yang perlu divalidasi, karena di activity diagram juga tidak digambarkan...
-        // jadi asumsi saya ngecek apakah ordernya sudah accept/blom
 		Order order = (Order) model.getOne(orderId);
-        if (validateStatus(order.getStatus())) {
-            setErrorMessage("This order is not taken yet");
-            return false;
+        if (status.equals(OrderStatus.ORDERED)) {
+            if(!validateStatus(order, OrderStatus.ACCEPTED)) {
+                setErrorMessage("Cannot order this food to restaurant");
+                return false;
+            }
         }
-        else {
-            return model.updateStatus(orderId, status);
+        else if (status.equals(OrderStatus.FINISHED)) {
+            if(!validateStatus(order, OrderStatus.COOKED)) {
+                setErrorMessage("This order is not cooked yet");
+                return false;
+            }
         }
+        return model.updateStatus(orderId, status);
 	}
 
 	public Boolean takeOrder(Integer orderId, Integer driverId) {
 		return model.takeOrder(orderId, driverId);
     }
 
-    private Boolean validateStatus(String status) {
-        return status.equalsIgnoreCase(OrderStatus.NOT_ACCEPTED);
+    private Boolean validateStatus(Order order, String status) {
+        return order.getStatus().equalsIgnoreCase(status);
     }
     
     public View viewTakenOrder() {

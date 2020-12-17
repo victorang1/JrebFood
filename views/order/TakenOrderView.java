@@ -1,6 +1,8 @@
 package views.order;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -8,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -20,6 +23,7 @@ import core.Model;
 import core.View;
 import models.Session;
 import models.order.Order;
+import util.StringUtil;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,8 +33,8 @@ public class TakenOrderView extends View implements ActionListener {
 
     private JTable table;
     private JScrollPane sp;
-    private JPanel contentPanel, formPanel;
-    private JButton btnOrder;
+    private JPanel contentPanel, formPanel, actionPanel;
+    private JButton btnOrder, btnDeliver;
     private JLabel lblTitle, lblOrderId, lblErrorMessage;
     private JTextField etOrderId;
     private Vector<Vector<String>> listTakenOrder;
@@ -44,8 +48,14 @@ public class TakenOrderView extends View implements ActionListener {
 	protected void onInitView() {
         contentPanel = new JPanel();
         formPanel = new JPanel();
+        actionPanel = new JPanel();
 
-        table = new JTable();
+        table = new JTable() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 		sp = new JScrollPane(table);
         lblTitle = new JLabel("List of Taken Order:");
         lblOrderId = new JLabel("Order Id");
@@ -54,13 +64,13 @@ public class TakenOrderView extends View implements ActionListener {
         etOrderId = new JTextField();
 
         btnOrder = new JButton("Order Food");
+        btnDeliver = new JButton("Deliver Food");
 
         loadTakenOrder();
 	}
 
 	@Override
 	protected void onViewCreated() {
-        
         lblErrorMessage.setVisible(false);
         lblErrorMessage.setForeground(Color.RED);
         sp.setAlignmentX(LEFT_ALIGNMENT);
@@ -71,9 +81,17 @@ public class TakenOrderView extends View implements ActionListener {
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.LINE_AXIS));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.LINE_AXIS));
+        actionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         formPanel.add(lblOrderId);
         formPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         formPanel.add(etOrderId);
+
+        actionPanel.add(btnOrder);
+        actionPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        actionPanel.add(btnDeliver);
+        actionPanel.setAlignmentX(LEFT_ALIGNMENT);
         
         lblTitle.setAlignmentX(LEFT_ALIGNMENT);
         contentPanel.add(backButton);
@@ -85,7 +103,8 @@ public class TakenOrderView extends View implements ActionListener {
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
         contentPanel.add(formPanel);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        contentPanel.add(btnOrder);
+        contentPanel.add(actionPanel);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         contentPanel.add(lblErrorMessage);
         
         add(contentPanel);
@@ -93,20 +112,61 @@ public class TakenOrderView extends View implements ActionListener {
 
 	@Override
 	protected void initListener() {
-		btnOrder.addActionListener(this);
+        btnOrder.addActionListener(this);
+        btnDeliver.addActionListener(this);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.getSelectedRow();
+                String orderId = (String) table.getValueAt(row, 0);
+                OrderHandler.getInstance().lastCheckoutOrderId = Integer.parseInt(orderId);
+                OrderHandler.getInstance().viewDetails();
+            }
+        });
 	}
     
     @Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnOrder)) {
             lblErrorMessage.setVisible(true);
-            Integer orderId = Integer.parseInt(etOrderId.getText());
-            if (OrderHandler.getInstance().updateStatus(orderId, OrderStatus.ORDERED)) {
-                lblErrorMessage.setText("Order To Restaurant Success");
+            if (StringUtil.isNullOrEmpty(etOrderId.getText())) {
+                lblErrorMessage.setText("Order Id Cannot Empty!");
             }
             else {
-                String errMsg = OrderHandler.getInstance().getErrorMessage();
-                lblErrorMessage.setText(errMsg);
+                Integer orderId = Integer.parseInt(etOrderId.getText());
+                if (OrderHandler.getInstance().updateStatus(orderId, OrderStatus.ORDERED)) {
+                    lblErrorMessage.setText("Order To Restaurant Success");
+                }
+                else {
+                    String errMsg = OrderHandler.getInstance().getErrorMessage();
+                    lblErrorMessage.setText(errMsg);
+                }
+                loadTakenOrder();
+            }
+        }
+        else if (e.getSource().equals(btnDeliver)) {
+            lblErrorMessage.setVisible(true);
+            if (StringUtil.isNullOrEmpty(etOrderId.getText())) {
+                lblErrorMessage.setText("Order Id Cannot Empty!");
+            }
+            else {
+                Integer orderId = Integer.parseInt(etOrderId.getText());
+                int dialogButton = JOptionPane.YES_NO_OPTION;
+                int dialogResult = JOptionPane.showConfirmDialog(this,
+                    "Are you sure you want to deliver order with id " + orderId + "?",
+                    "Confirmation Dialog",
+                    dialogButton
+                );
+                if(dialogResult == 0) {
+                    if (OrderHandler.getInstance().updateStatus(orderId, OrderStatus.FINISHED)) {
+                        lblErrorMessage.setText("Deliver Order To Customer Success");
+                    }
+                    else {
+                        String errMsg = OrderHandler.getInstance().getErrorMessage();
+                        lblErrorMessage.setText(errMsg);
+                    }
+                }
+                loadTakenOrder();
             }
         }
     }

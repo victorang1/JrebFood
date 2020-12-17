@@ -37,7 +37,7 @@ public class DetailsView extends View {
 
         table = new JTable();
 		sp = new JScrollPane(table);
-		lblTitle = new JLabel("History Orders:");
+		lblTitle = new JLabel("Detail Views:");
 		loadDetail();
 	}
 
