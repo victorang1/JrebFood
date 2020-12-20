@@ -40,7 +40,21 @@ public class UserHandler extends Controller {
     
     public Boolean createAccount(String name, String address, String email, String phoneNumber,
             String password) {
-        return model.createAccount(name, address, email, phoneNumber, password);
+        if (validateFields(email, phoneNumber)) {
+            setErrorMessage("All field must be input!");
+            return false;
+        }
+        else if (validateUnique(email, phoneNumber)) {
+            setErrorMessage("Email/Phone Number has been used!");
+            return false;
+        }
+        else if (model.createAccount(name, address, email, phoneNumber, password)){
+            return true;
+        }
+        else {
+            setErrorMessage("Something went wrong");
+            return false;
+        }
     }
 
     public Boolean login(String email, String password) {

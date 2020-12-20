@@ -67,13 +67,13 @@ public class ChefLandingView extends View implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(viewFoodAvailability)) {
-            OrderHandler.getInstance().viewProfit();
+            FoodHandler.getInstance().viewManageFoodForm();
         }
         else if (e.getSource().equals(btnFoodForm)) {
             FoodHandler.getInstance().viewManageFoodForm();
         }
         else if (e.getSource().equals(btnViewQueue)) {
-        	EmployeeHandler.getInstance().viewManageEmployeeForm();
+        	OrderHandler.getInstance().viewOrderQueue();
         }
 	}
 }

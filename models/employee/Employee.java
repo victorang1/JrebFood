@@ -121,7 +121,7 @@ public class Employee extends Model implements EmployeeModel {
                 employee.status = rs.getString("status");
                 return employee;
             }
-            throw new Exception();
+            return null;
         } catch(Exception e) {
             e.printStackTrace();
             return null;

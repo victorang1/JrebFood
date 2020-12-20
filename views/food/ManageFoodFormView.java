@@ -23,9 +23,9 @@ import java.awt.event.ActionEvent;
 
 public class ManageFoodFormView extends View implements ActionListener {
     
-    private JPanel landingPanel, addPanel, removePanel, addFormPanel, removeFormPanel;
+    private JPanel landingPanel, addPanel, removePanel, addFormPanel, removeFormPanel, bottomPanel;
     private JLabel lblTitle, lblName, lblPrice,lblDescription, lblFoodId,lblErrorMessage;
-	private JButton btnAddMenu,btnRemoveMenu;
+	private JButton btnAddMenu, btnRemoveMenu, btnChange;
     private JTextField etName, etPrice, etDescription, etFoodId;
 
 	public ManageFoodFormView() {
@@ -37,6 +37,7 @@ public class ManageFoodFormView extends View implements ActionListener {
 		landingPanel = new JPanel();
 		addPanel = new JPanel();
 		removePanel = new JPanel();
+		bottomPanel = new JPanel();
 		addFormPanel = new JPanel(new GridLayout(5, 2, 0, 5));
 		removeFormPanel = new JPanel(new GridLayout(0, 2, 0, 5));
 		lblTitle = new JLabel("Add or Remove Menu");
@@ -54,6 +55,7 @@ public class ManageFoodFormView extends View implements ActionListener {
 
 		btnAddMenu = new JButton("Add Menu");
 		btnRemoveMenu = new JButton("Remove Menu");
+		btnChange = new JButton("Change Food Availibility");
 	}
 
 	@Override
@@ -91,6 +93,13 @@ public class ManageFoodFormView extends View implements ActionListener {
 		removePanel.setLayout(new BoxLayout(removePanel, BoxLayout.PAGE_AXIS));
 		removePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.LINE_AXIS));
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		bottomPanel.add(btnRemoveMenu);
+		bottomPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+		bottomPanel.add(btnChange);
+
 		removeFormPanel.add(lblFoodId);
 		removeFormPanel.add(etFoodId);
 		etFoodId.setSize(new Dimension(200, 50));
@@ -99,8 +108,9 @@ public class ManageFoodFormView extends View implements ActionListener {
 		btnRemoveMenu.setAlignmentX(CENTER_ALIGNMENT);
 		removePanel.add(removeFormPanel);
 		removePanel.add(Box.createRigidArea(new Dimension(0, 10)));
-		removePanel.add(btnRemoveMenu);
+		removePanel.add(bottomPanel);
 
+		landingPanel.add(backButton);
 		landingPanel.add(addPanel);
 		landingPanel.add(removePanel);
 
@@ -112,6 +122,7 @@ public class ManageFoodFormView extends View implements ActionListener {
 	protected void initListener() {
 		btnAddMenu.addActionListener(this);
 		btnRemoveMenu.addActionListener(this);
+		btnChange.addActionListener(this);
 	}
 	
 	@Override
@@ -133,7 +144,7 @@ public class ManageFoodFormView extends View implements ActionListener {
 			String foodId = etFoodId.getText();
 			int dialogButton = JOptionPane.YES_NO_OPTION;
 			int dialogResult = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to remove this menu with foodId =" + foodId + "?",
+				"Are you sure you want to remove this menu with foodId= " + foodId + "?",
 				"Confirmation Dialog",
 				dialogButton
 			);
@@ -145,6 +156,24 @@ public class ManageFoodFormView extends View implements ActionListener {
 					lblErrorMessage.setText("Remove Food Failed!");
 				}
 			}
-        }
+		}
+		else if (e.getSource().equals(btnChange)) {
+			lblErrorMessage.setVisible(true);
+			String foodId = etFoodId.getText();
+			int dialogButton = JOptionPane.YES_NO_OPTION;
+			int dialogResult = JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to change food availibty with foodId= " + foodId + "?",
+				"Confirmation Dialog",
+				dialogButton
+			);
+			if(dialogResult == 0) {
+				if (FoodHandler.getInstance().changeStatus(Integer.parseInt(foodId))) {
+					lblErrorMessage.setText("Change Food Availibility Success!");
+				}
+				else {
+					lblErrorMessage.setText("Change Food Availibility Failed!");
+				}
+			}
+		}
 	}
 }
