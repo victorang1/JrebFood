@@ -17,9 +17,11 @@ import models.user.User;
 import util.DateUtil;
 import views.order.AvailableOrderView;
 import views.order.DetailsView;
+import views.order.FilterDriverView;
 import views.order.HistoryView;
 import views.order.OrderQueueView;
 import views.order.OrdersView;
+import views.order.ProfitView;
 import views.order.TakenOrderView;
 import views.order.UserOrdersView;
 
@@ -96,6 +98,7 @@ public class OrderHandler extends Controller {
         Vector<Model> userOrderHistories = new Vector<>();
         for (Model m : model.getAll()) {
             Order order = (Order) m;
+            if (id == -1) userOrderHistories.add(order);
             if (order.getStatus().equals(OrderStatus.FINISHED)) {
                 if (Session.getInstance().isEmployee()) {
                     if (order.getDriverId().equals(id)) {
@@ -205,11 +208,11 @@ public class OrderHandler extends Controller {
     }
 
     public View viewProfit() {
-        return null;
+        return new ProfitView();
     }
 
     public View filterDriver() {
-        return null;
+        return new FilterDriverView();
     }
 
     public View viewOrderQueue() {

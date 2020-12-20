@@ -120,20 +120,10 @@ public class RegistrationFormView extends View implements ActionListener {
         String phoneNumber = etPhoneNumber.getText();
         String password = etPassword.getText();
         UserHandler userHandler = UserHandler.getInstance();
-        if (userHandler.validateFields(email, phoneNumber)) {
-            lblErrorMessage.setText("All field must be input!");
+        if (userHandler.createAccount(name, address, email, phoneNumber, password)) {
+            lblErrorMessage.setText("Register Success");
         }
-        else if (userHandler.validateUnique(email, phoneNumber)) {
-            lblErrorMessage.setText("Email/Phone Number has been used!");
-        }
-        else {
-            if (userHandler.createAccount(name, address, email, phoneNumber, password)) {
-                lblErrorMessage.setText("Register Success");
-            }
-            else {
-                lblErrorMessage.setText("Something went wrong");
-            }
-        }
+        else lblErrorMessage.setText(UserHandler.getInstance().getErrorMessage());
         lblErrorMessage.setVisible(true);
     }
 }
